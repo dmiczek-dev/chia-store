@@ -1,20 +1,23 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const dotenv = require('dotenv');
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const indexRoute = require('./routes');
+const authRoutes = require('./routes/auth');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-
-var app = express();
+dotenv.config();
+const app = express();
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use(indexRoute);
+app.use(authRoutes);
+
+app.listen(3000, () => {
+  console.log('Server is up!');
+});
 
 module.exports = app;
