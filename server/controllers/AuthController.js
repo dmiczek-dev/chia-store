@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const {generateAccessToken} = require('../helpers/token');
+const {generateAccessToken} = require('../helpers/auth');
 
 exports.login = (req, res) => {
   const email = req.body.email;
@@ -23,3 +23,23 @@ exports.login = (req, res) => {
 exports.register = (req, res) => {
 
 };
+
+exports.refreshToken = (req, res) => {
+  const refreshToken = req.body.token
+
+  if (!refreshToken) {
+    return res.status(401)
+  }
+
+  // Check if refreshToken exists in DB
+
+  const validToken = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
+
+  if (!validToken) {
+    return res.status(403)
+  }
+
+  const accessToken = generateAccessToken({ id: 1 })
+
+  res.send({ accessToken })
+}
