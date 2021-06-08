@@ -6,13 +6,11 @@ exports.generateAccessToken = function (payload) {
 };
 
 exports.hashPassword = async function (plainText) {
-
   const hashedPassword = await new Promise((resolve, reject) => {
     bcrypt.hash(plainText, 10, function (err, result) {
       if (err) { reject(err) }
       resolve(result)
     })
   })
-
   return hashedPassword
 }

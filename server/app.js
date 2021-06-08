@@ -4,7 +4,8 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const indexRoute = require('./routes');
 const authRoutes = require('./routes/auth');
-const { dbConnect, getClient } = require('./db/config');
+const orderRoutes = require('./routes/order');
+const { dbConnect } = require('./db/config');
 
 dotenv.config();
 const app = express();
@@ -19,8 +20,9 @@ app.use(cookieParser());
 
 app.use(indexRoute);
 app.use(authRoutes);
+app.use(orderRoutes);
 
-app.listen(3000, () => {
+app.listen(process.env.PORT, () => {
   console.log('Server is up!');
 });
 

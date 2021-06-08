@@ -5,9 +5,9 @@ const { generateAccessToken, hashPassword } = require('../helpers/auth');
 const { getClient } = require('../db/config')
 
 exports.login = (req, res) => {
+  const client = getClient();
   const username = req.body.username;
   const password = req.body.password;
-  const client = getClient();
 
   // validate user
   client
@@ -54,24 +54,29 @@ exports.login = (req, res) => {
 };
 
 exports.logout = (req, res) => {
-  let payload = jwt.decode(req.body.token);
-  client.query('UPDATE credentials SET jwt_refresh = null WHERE user_id = $1', [payload.userId])
+  const client = getClient();
+  const token = req.cookies.JWT;
+  const payload = jwt.decode(token);
+
+  client.query('UPDATE users SET jwt_refresh = null WHERE user_id = $1', [payload.userId]).then(() => {
+    res.status(200).send();
+  }).catch((err) => {
+    res.status(500).send({ error: err })
+  })
 }
 
 exports.register = async (req, res) => {
-  let username = req.body.username;
-  let password = req.body.password;
-  let email = req.body.email;
-  let wallet = req.body.wallet
-  let hashedPassword = await hashPassword(password)
-
   const client = getClient();
+  const username = req.body.username;
+  const password = req.body.password;
+  const email = req.body.email;
+  const hashedPassword = await hashPassword(password)
 
   client
-    .query('INSERT INTO users(user_id, username, password, email, active) VALUES (DEFAULT, $1, $2, $3, TRUE) RETURNING user_id', [username, hashedPassword, email])
-    .then((result) => {
-      let userId = result.rows[0].user_id;
-      client.query('INSERT INTO resources(resource_id, plots, disk_space, balance, time_online')
+    .query('INSERT INTO users(user_id, username, password, email, active, jwt_refresh, deleted) VALUES (DEFAULT, $1, $2, $3, TRUE, NULL, FALSE)', [username, hashedPassword, email]).then(() => {
+      res.status(200).send();
+    }).catch((err) => {
+      res.status(500).send({ error: err })
     })
 };
 
