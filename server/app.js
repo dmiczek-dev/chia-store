@@ -4,13 +4,17 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const indexRoute = require('./routes');
 const authRoutes = require('./routes/auth');
+const { dbConnect, getClient } = require('./db/config');
 
 dotenv.config();
 const app = express();
 
+// Connect to PostgreSQL
+dbConnect()
+
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use(indexRoute);
