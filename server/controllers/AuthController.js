@@ -63,14 +63,15 @@ exports.register = async (req, res) => {
   let password = req.body.password;
   let email = req.body.email;
   let wallet = req.body.wallet
-  let hashedPass = hashPassword(password)
+  let hashedPassword = await hashPassword(password)
 
   const client = getClient();
 
   client
-    .query('INSERT INTO users(user_id, username, password, email, active) VALUES (DEFAULT, $1, $2, $3, TRUE)', [username, hashedPass, email])
+    .query('INSERT INTO users(user_id, username, password, email, active) VALUES (DEFAULT, $1, $2, $3, TRUE) RETURNING user_id', [username, hashedPassword, email])
     .then((result) => {
-      console.log(result.rows)
+      let userId = result.rows[0].user_id;
+      client.query('INSERT INTO resources(resource_id, plots, disk_space, balance, time_online')
     })
 };
 
