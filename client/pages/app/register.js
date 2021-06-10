@@ -1,7 +1,7 @@
 import React from 'react';
+import { useForm, Controller } from 'react-hook-form';
 import { Button, TextField, Box } from '@material-ui/core';
 import { RegisterWrapper, RegisterContainer, Heading, Form } from '../../styles/RegisterStyle';
-import { useForm, Controller } from 'react-hook-form';
 
 export default function Register () {
     const {
@@ -23,23 +23,25 @@ export default function Register () {
                 <Form onSubmit={handleSubmit(onSubmit)}>
                     <Box mb={2}>
                         <Controller
-                            name="MyCheckbox"
+                            name="registerEmail"
                             control={control}
                             defaultValue=""
                             rules={{ required: true }}
-                            render={({ field }) => <TextField label="Email" {...field} />}
+                            render={({ field }) =>
+                                <TextField error={!!errors.registerEmail} helperText={!!errors.registerEmail ? 'Dupa' : ''}
+                                           label="Email" {...field} />}
                         />
-                        {errors.email && <p>This is required</p>}
                     </Box>
                     <Box mb={4}>
                         <Controller
-                            name="MyCheckbox"
+                            name="registerPassword"
                             control={control}
                             defaultValue=""
+                            error={errors.registerPassword}
+                            helperText="Required field"
                             rules={{ required: true }}
-                            render={({ field }) => <TextField label="Password" {...field} />}
+                            render={({ field }) => <TextField error={!!errors.registerPassword} helperText="Dupa" label="Password" {...field} />}
                         />
-                        {errors.email && <p>This is required</p>}
                     </Box>
 
 
