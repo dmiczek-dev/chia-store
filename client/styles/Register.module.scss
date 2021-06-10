@@ -14,6 +14,11 @@
     padding: 3rem 2.5rem;
     box-shadow: 0px 3px 20px 8px #0c8346;
   }
+
+  &__heading {
+    font-size: 2rem;
+    text-align: center;
+  }
 }
 
 .form {
@@ -29,24 +34,37 @@
 
   &__label {
     position: absolute;
-    top: 3rem;
-    left: 2rem;
+    top: 50%;
+    transform: translate(0, -50%);
+    padding: 1rem;
     z-index: 1;
-    transform: translateY(-50%);
-    transition: transform 150ms;
+    transition: transform 200ms;
     cursor: text;
+    pointer-events: none;
+    margin: 0;
 
-    &.focus {
-      transform: translate(-2rem, calc(-50% - 4rem));
+    &Focus {
+      position: absolute;
+
+      top: 0;
+      left: 0;
+      transform: translate(-1rem, -70%);
+      font-size: 14px;
+      color: #232323;
     }
   }
 
   &__input {
-    width: 20rem;
-    height: 2.6rem;
+    width: 22rem;
+    height: 3rem;
+    border: 2px solid green;
+    color: #232323;
+    padding: 1rem;
+    &:focus {
+      outline: none;
+    }
   }
+  
 }
 
-.inputFocus {
-  color: red;
-}
+
