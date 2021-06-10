@@ -20,28 +20,31 @@ exports.login = (req, res) => {
         });
       } else {
         let userFromDB = result.rows[0];
-        bcrypt.compare(password, userFromDB.password, (err, isValid) => {
-          if (isValid) {
 
-            const accessToken = generateAccessToken({ userId: userFromDB.user_id });
-            const refreshToken = jwt.sign({ userId: userFromDB.user_id }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: 525600 });
+        client.query('SELECT * FROM permissions WHERE permission_id = $1', [userFromDB.permission_id]).then((result) => {
+          bcrypt.compare(password, userFromDB.password, (err, isValid) => {
+            if (isValid) {
+              const permission = result.rows[0].name
+              const accessToken = generateAccessToken({ userId: userFromDB.user_id, permission: permission });
+              const refreshToken = jwt.sign({ userId: userFromDB.user_id, permission: permission }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: 525600 });
 
-            // Save refresh Token in DB
-            client
-              .query('UPDATE credentials SET jwt_refresh = $1 WHERE user_id = $2', [refreshToken, userFromDB.user_id])
-              .then(() => {
-                res.cookie('JWT', accessToken, {
-                  maxAge: 86400000,
-                  httpOnly: true,
-                });
+              // Save refresh Token in DB
+              client
+                .query('UPDATE users SET jwt_refresh = $1 WHERE user_id = $2', [refreshToken, userFromDB.user_id])
+                .then(() => {
+                  res.cookie('JWT', accessToken, {
+                    maxAge: 86400000,
+                    httpOnly: true,
+                  });
 
-                res.status(200).send({ accessToken, refreshToken });
-              })
-          } else {
-            res.status(401).send({
-              message: 'Invalid username or password'
-            });
-          }
+                  res.status(200).send({ accessToken, refreshToken });
+                })
+            } else {
+              res.status(401).send({
+                message: 'Invalid username or password'
+              });
+            }
+          })
         })
       }
     }).catch((err) => {
@@ -71,13 +74,16 @@ exports.register = async (req, res) => {
   const password = req.body.password;
   const email = req.body.email;
   const hashedPassword = await hashPassword(password)
+  console.log(req.body.permission_id)
+  const permissionId = req.body.permission_id === undefined ? '2' : req.body.permission_id; // permissionId = 2 (User)
 
   client
-    .query('INSERT INTO users(user_id, username, password, email, active, jwt_refresh, deleted) VALUES (DEFAULT, $1, $2, $3, TRUE, NULL, FALSE)', [username, hashedPassword, email]).then(() => {
+    .query('INSERT INTO users(user_id, username, password, email, active, jwt_refresh, deleted, permission_id) VALUES (DEFAULT, $1, $2, $3, TRUE, NULL, FALSE, $4)', [username, hashedPassword, email, permissionId]).then(() => {
       res.status(200).send();
     }).catch((err) => {
       res.status(500).send({ error: err })
     })
+
 };
 
 exports.refreshToken = (req, res) => {
