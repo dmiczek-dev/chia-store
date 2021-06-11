@@ -1,11 +1,11 @@
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { Button, TextField, Box } from '@material-ui/core';
-import { RegisterWrapper, RegisterContainer, Heading, Form } from '../../styles/RegisterStyle';
+import { LoginWrapper, LoginContainer, Heading, Form } from '../../styles/LoginStyle';
 
-export default function Register() {
+export default function Login() {
     const {
-        register,
+        login,
         handleSubmit,
         control,
         reset,
@@ -17,9 +17,9 @@ export default function Register() {
     };
 
     return (
-        <RegisterContainer>
-            <RegisterWrapper>
-                <Heading>Rejestracja</Heading>
+        <LoginContainer>
+            <LoginWrapper>
+                <Heading>Logowanie</Heading>
                 <Form onSubmit={handleSubmit(onSubmit)}>
                     <Box mb={2}>
                         <Controller
@@ -32,34 +32,23 @@ export default function Register() {
                                     label="Nazwa użytkownika" {...field} />}
                         />
                     </Box>
-                    <Box mb={2}>
-                        <Controller
-                            name="email"
-                            control={control}
-                            defaultValue=""
-                            rules={{ required: true }}
-                            render={({ field }) =>
-                                <TextField error={!!errors.email} helperText={!!errors.email ? 'Uzupełnuj to pole' : ''}
-                                    label="Email" {...field} />}
-                        />
-                    </Box>
                     <Box mb={4}>
                         <Controller
                             name="password"
                             control={control}
                             defaultValue=""
                             rules={{ required: true }}
-                            render={({ field }) => <TextField type="password" error={!!errors.password} helperText={!!errors.password ? 'Uzupełnuj to pole' : ''} label="Hasło" {...field} />}
+                            render={({ field }) => <TextField type="password" error={!!errors.password} autoComplete="off" helperText={!!errors.username ? 'Uzupełnij to pole' : ''} label="Hasło" {...field} />}
                         />
                     </Box>
 
 
                     <Button type="submit"
                         variant="contained" color="primary"
-                        size="large">Zarejestruj</Button>
+                        size="large">Zaloguj</Button>
                 </Form>
-            </RegisterWrapper>
-        </RegisterContainer>
+            </LoginWrapper>
+        </LoginContainer>
     );
 }
 
