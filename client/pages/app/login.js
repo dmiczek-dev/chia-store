@@ -1,9 +1,9 @@
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { Button, TextField, Box } from '@material-ui/core';
-import { LoginWrapper, LoginContainer, Heading, Form } from '../../styles/LoginStyle';
+import { LoginWrapper, LoginContainer, Heading, Form } from '../../styles/Login.styles';
 
-export default function Login() {
+export default function Login () {
     const {
         login,
         handleSubmit,
@@ -29,7 +29,7 @@ export default function Login() {
                             rules={{ required: true }}
                             render={({ field }) =>
                                 <TextField error={!!errors.username} autoComplete="off" helperText={!!errors.username ? 'Uzupełnij to pole' : ''}
-                                    label="Nazwa użytkownika" {...field} />}
+                                           label="Nazwa użytkownika" {...field} />}
                         />
                     </Box>
                     <Box mb={4}>
@@ -38,14 +38,15 @@ export default function Login() {
                             control={control}
                             defaultValue=""
                             rules={{ required: true }}
-                            render={({ field }) => <TextField type="password" error={!!errors.password} autoComplete="off" helperText={!!errors.username ? 'Uzupełnij to pole' : ''} label="Hasło" {...field} />}
+                            render={({ field }) => <TextField type="password" error={!!errors.password} autoComplete="off"
+                                                              helperText={!!errors.username ? 'Uzupełnij to pole' : ''} label="Hasło" {...field} />}
                         />
                     </Box>
 
 
                     <Button type="submit"
-                        variant="contained" color="primary"
-                        size="large">Zaloguj</Button>
+                            variant="contained" color="primary"
+                            size="large">Zaloguj</Button>
                 </Form>
             </LoginWrapper>
         </LoginContainer>

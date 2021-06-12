@@ -1,5 +1,6 @@
 import NextApp from 'next/app'
 import React from 'react'
+import '../public/fonts/fonts.css';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import { ThemeProvider as MaterialThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { GlobalStyle } from '../styles/GlobalStyle';
