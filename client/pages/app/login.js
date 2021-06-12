@@ -3,7 +3,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { Button, TextField, Box } from '@material-ui/core';
 import { LoginWrapper, LoginContainer, Heading, Form } from '../../styles/Login.styles';
 
-export default function Login () {
+const Login = () => {
     const {
         login,
         handleSubmit,
@@ -51,5 +51,6 @@ export default function Login () {
             </LoginWrapper>
         </LoginContainer>
     );
-}
+};
 
+export default Login;

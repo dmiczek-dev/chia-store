@@ -2,7 +2,7 @@ import React from 'react';
 import { HeaderWrapper, LogoWrapper, PageTitle, StyledButton, StyledLogo } from './Header.styles';
 import { Button } from '@material-ui/core';
 
-export const Header = () => {
+const Header = () => {
     return (
         <HeaderWrapper>
             <LogoWrapper>
@@ -17,3 +17,5 @@ export const Header = () => {
         </HeaderWrapper>
     );
 };
+
+export default Header;

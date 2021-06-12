@@ -14,7 +14,7 @@ export const LoginWrapper = styled.div`
   min-width: 30rem;
   border-radius: 1rem;
   padding: 3rem 2.5rem;
-  box-shadow: 0px 3px 20px 8px #0c8346;
+  box-shadow: 0 3px 20px 8px #0c8346;
 `;
 
 export const Heading = styled.h2`
