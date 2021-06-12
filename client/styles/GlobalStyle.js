@@ -18,6 +18,9 @@ export const GlobalStyle = createGlobalStyle`
 
   a, button {
     font-family: 'Roboto', sans-serif;
+    background-color: transparent;
+    color: inherit;
+    text-decoration: initial;
   }
   
   h1, h2, h3, h4, p, span, img, figure {
