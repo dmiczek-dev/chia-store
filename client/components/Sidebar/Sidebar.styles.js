@@ -4,22 +4,24 @@ import WalletIcon from '@material-ui/icons/AccountBalanceWalletOutlined';
 import AssignmentIcon from '@material-ui/icons/AssignmentOutlined';
 
 export const SidebarWrapper = styled.nav`
-  width: 14.95rem;
+  width: 14.90rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   height: calc(100vh - 8rem);
   background-color: white;
-  box-shadow: 1px 0 3px 0 rgb(0 0 0 / 30%);
+  box-shadow: 2px 0 3px 0 rgb(0 0 0 / 30%);
   grid-area: sidebar;
+  margin-top: 2px;
 `;
 
 export const MenuItem = styled.a`
   width: 100%;
-  padding: 2rem 1rem;
+  padding: 1.5rem 1rem;
   display: table-cell;
   text-align: center;
   vertical-align: middle;
+  border-bottom: 1px solid #eceaea;
 
   &.active {
     background-color: #e3e3e3;
