@@ -1,24 +1,22 @@
 import styled from 'styled-components';
 
 export const HeaderWrapper = styled.div`
-  max-height: 100px;
-  min-height: 50px;
   display: grid;
   grid-template-columns: 15rem 1fr 10rem;
   box-shadow: 0 2px 3px rgb(0 0 0 / 30%);
   align-items: end;
   grid-area: navbar;
-  overflow: hidden;
 `;
 
 export const LogoWrapper = styled.div`
   border-right: 2px solid #eceaea;
-  padding: 1em 2em 2em 2em;
   box-sizing: border-box;
 `;
 
 export const StyledLogo = styled.img`
+  padding: 1em 2em 2em 2em;
   height: 100%;
+  object-fit: cover;
 `;
 
 export const PageTitle = styled.h2`

@@ -5,12 +5,20 @@ import Sidebar from '../../components/Sidebar/Sidebar';
 
 const DashboardWrapper = styled.main`
   display: grid;
+  height: 100vh;
   grid-template-areas: "navbar navbar"
-                        "sidebar content";
+"sidebar content";
+  //grid-template-rows: 4.3rem minmax(0, 1fr);
+  grid-template-columns: 14.90rem minmax(0, 1fr);
+  min-height: 0;  /* NEW */ 
+  min-width: 0;
 `;
 
 const ContentWrapper = styled.div`
   grid-area: content;
+  margin: 1rem;
+  overflow: auto;
+  padding: 1rem;
 `;
 
 const Dashboard = ({ children }) => {

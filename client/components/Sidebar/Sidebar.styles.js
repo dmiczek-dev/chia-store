@@ -5,12 +5,9 @@ import AssignmentIcon from '@material-ui/icons/AssignmentOutlined';
 import SettingsIcon from '@material-ui/icons/SettingsOutlined';
 
 export const SidebarWrapper = styled.nav`
-  width: 14.90rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  height: calc(100vh - 10.5vh);
-  background-color: white;
   box-shadow: 2px 0 3px 0 rgb(0 0 0 / 30%);
   grid-area: sidebar;
   margin-top: 2px;
