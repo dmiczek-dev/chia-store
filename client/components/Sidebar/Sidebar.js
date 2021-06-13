@@ -1,7 +1,7 @@
 import React from 'react';
 import ActiveLink from '../ActiveLink/ActiveLink';
 
-import { SidebarWrapper, MenuItem, MenuTitle, StyledHomeIcon, StyledWalletIcon, StyledAssignmentIcon } from './Sidebar.styles';
+import { SidebarWrapper, MenuItem, MenuTitle, StyledHomeIcon, StyledWalletIcon, StyledAssignmentIcon, StyledSettingsIcon } from './Sidebar.styles';
 
 const Sidebar = () => {
   return (
@@ -27,6 +27,14 @@ const Sidebar = () => {
           <StyledAssignmentIcon />
           <MenuTitle>
             Zamówienia
+          </MenuTitle>
+        </MenuItem>
+      </ActiveLink>
+      <ActiveLink href="/app/settings" activeClassName="active" passHref>
+        <MenuItem>
+          <StyledSettingsIcon />
+          <MenuTitle>
+            Ustawienia
           </MenuTitle>
         </MenuItem>
       </ActiveLink>

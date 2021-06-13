@@ -6,7 +6,7 @@ import Sidebar from '../../components/Sidebar/Sidebar';
 const DashboardWrapper = styled.main`
   display: grid;
   grid-template-areas: "navbar navbar"
-                         "sidebar content";
+                        "sidebar content";
 `;
 
 const ContentWrapper = styled.div`
@@ -16,8 +16,8 @@ const ContentWrapper = styled.div`
 const Dashboard = ({ children }) => {
     return (
         <DashboardWrapper>
-            <Header/>
-            <Sidebar/>
+            <Header />
+            <Sidebar />
             <ContentWrapper>
                 {children}
             </ContentWrapper>

@@ -1,10 +1,10 @@
 import React from 'react';
 import Dashboard from '../../layout/Dashboard/Dashboard';
 
-export default function Orders() {
+export default function Settings() {
     return (
         <Dashboard>
-            Twoje Zamówienia w tabelce
+            Formularz do zmiany hasła oraz email
         </Dashboard>
     );
 
