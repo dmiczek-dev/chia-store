@@ -11,7 +11,7 @@ export const HeaderWrapper = styled.div`
 
 export const LogoWrapper = styled.div`
   border-right: 2px solid #eceaea;
-  padding: 2rem 3rem;
+  padding: 2rem 2rem;
 `;
 
 export const StyledLogo = styled.img`
