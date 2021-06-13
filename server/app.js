@@ -1,20 +1,31 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const dotenv = require('dotenv');
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const indexRoute = require('./routes');
+const authRoutes = require('./routes/auth');
+const orderRoutes = require('./routes/order');
+const userRoutes = require('./routes/user');
+const { dbConnect } = require('./db/config');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+dotenv.config();
+const app = express();
 
-var app = express();
+// Connect to PostgreSQL
+dbConnect()
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use(indexRoute);
+app.use(authRoutes);
+app.use(orderRoutes);
+app.use(userRoutes);
+
+app.listen(process.env.PORT, () => {
+  console.log('Server is up!');
+});
 
 module.exports = app;
