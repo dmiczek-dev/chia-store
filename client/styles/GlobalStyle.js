@@ -3,6 +3,7 @@ import { createGlobalStyle } from 'styled-components';
 export const GlobalStyle = createGlobalStyle`
   html {
     box-sizing: border-box;
+    //font-size: 62.5%;
   }
 
   *, *::after, *::before {
@@ -22,14 +23,14 @@ export const GlobalStyle = createGlobalStyle`
     color: inherit;
     text-decoration: initial;
   }
-  
+
   h1, h2, h3, h4, p, span, img, figure {
     padding: 0;
     margin: 0;
     font-family: 'Roboto', sans-serif;
-    
+
   }
-  
+
   img {
     height: 100%;
     width: 100%;
