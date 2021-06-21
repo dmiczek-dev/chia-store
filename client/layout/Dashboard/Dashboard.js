@@ -8,7 +8,7 @@ const DashboardWrapper = styled.main`
   height: 100vh;
   grid-template-areas: "navbar navbar"
 "sidebar content";
-  grid-template-rows: 4.3rem minmax(0, 1fr);
+  grid-template-rows: 6.3rem minmax(0, 1fr);
   grid-template-columns: 14.90rem minmax(0, 1fr);
   min-height: 0;  
   min-width: 0;
