@@ -3,8 +3,14 @@ const bcrypt = require('bcrypt');
 
 const { generateAccessToken, hashPassword } = require('../helpers/auth');
 const { getClient } = require('../db/config')
+const { validateUserRegister, validateUserLogin, validateCreateAccount } = require('../helpers/validate')
 
 exports.login = (req, res) => {
+  if (!validateUserLogin(req.body)) {
+    res.status(404).send({ error: 'Validation error' })
+    return;
+  }
+
   const client = getClient();
   const username = req.body.username;
   const password = req.body.password;
@@ -69,12 +75,39 @@ exports.logout = (req, res) => {
 }
 
 exports.register = async (req, res) => {
+  if (!validateUserRegister(req.body)) {
+    res.status(404).send({ error: 'Validation error' })
+    return;
+  }
+
   const client = getClient();
   const username = req.body.username;
   const password = req.body.password;
   const email = req.body.email;
   const hashedPassword = await hashPassword(password)
-  const permissionId = req.body.permission_id === undefined ? '2' : req.body.permission_id; // permissionId = 2 (User)
+  const permissionId = '2' // permissionId = 2 (User)
+
+  client
+    .query('INSERT INTO users(user_id, username, password, email, active, jwt_refresh, deleted, permission_id) VALUES (DEFAULT, $1, $2, $3, TRUE, NULL, FALSE, $4)', [username, hashedPassword, email, permissionId]).then(() => {
+      res.status(200).send();
+    }).catch((err) => {
+      res.status(500).send({ error: err })
+    })
+
+};
+
+exports.createAccount = async (req, res) => {
+  if (!validateCreateAccount(req.body)) {
+    res.status(404).send({ error: 'Validation error' })
+    return;
+  }
+
+  const client = getClient();
+  const username = req.body.username;
+  const password = req.body.password;
+  const email = req.body.email;
+  const hashedPassword = await hashPassword(password)
+  const permissionId = req.body.permission_id
 
   client
     .query('INSERT INTO users(user_id, username, password, email, active, jwt_refresh, deleted, permission_id) VALUES (DEFAULT, $1, $2, $3, TRUE, NULL, FALSE, $4)', [username, hashedPassword, email, permissionId]).then(() => {
