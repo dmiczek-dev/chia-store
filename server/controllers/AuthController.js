@@ -74,7 +74,6 @@ exports.register = async (req, res) => {
   const password = req.body.password;
   const email = req.body.email;
   const hashedPassword = await hashPassword(password)
-  console.log(req.body.permission_id)
   const permissionId = req.body.permission_id === undefined ? '2' : req.body.permission_id; // permissionId = 2 (User)
 
   client

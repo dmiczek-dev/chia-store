@@ -14,3 +14,5 @@ exports.hashPassword = async function (plainText) {
   })
   return hashedPassword
 }
+
+exports.validateUserRegister
