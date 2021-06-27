@@ -7,9 +7,15 @@ const authRoutes = require('./routes/auth');
 const orderRoutes = require('./routes/order');
 const userRoutes = require('./routes/user');
 const { dbConnect } = require('./db/config');
+const cors = require('cors');
 
 dotenv.config();
 const app = express();
+
+const corsOptions = {
+  origin: process.env.CORS_ORIGIN,
+  optionSuccessStatus: process.env.CORS_OSS,
+};
 
 // Connect to PostgreSQL
 dbConnect()
@@ -18,6 +24,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(cors(corsOptions));
 
 app.use(indexRoute);
 app.use(authRoutes);
