@@ -87,12 +87,22 @@ exports.register = async (req, res) => {
   const hashedPassword = await hashPassword(password)
   const permissionId = '2' // permissionId = 2 (User)
 
-  client
-    .query('INSERT INTO users(user_id, username, password, email, active, jwt_refresh, deleted, permission_id) VALUES (DEFAULT, $1, $2, $3, TRUE, NULL, FALSE, $4)', [username, hashedPassword, email, permissionId]).then(() => {
-      res.status(200).send();
-    }).catch((err) => {
-      res.status(500).send({ error: err })
-    })
+  // check if username or email is taken
+  client.query('SELECT username, email FROM users WHERE username = $1 OR email = $2', [username, email]).then((result) => {
+    if (result.rowCount === 0) {
+      client
+        .query('INSERT INTO users(user_id, username, password, email, active, jwt_refresh, deleted, permission_id) VALUES (DEFAULT, $1, $2, $3, TRUE, NULL, FALSE, $4)', [username, hashedPassword, email, permissionId]).then(() => {
+          res.status(200).send();
+        }).catch((err) => {
+          res.status(500).send({ error: err })
+        })
+    } else {
+      res.status(400).send({ error: 'Username or email taken' })
+      return;
+    }
+  }).catch((err) => {
+    res.status(500).send({ error: err })
+  });
 
 };
 

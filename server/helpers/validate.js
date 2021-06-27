@@ -15,7 +15,8 @@ exports.validateUserRegister = function (payload) {
     return false
   } else if ([payload.username, payload.password, payload.email].includes(undefined)) {
     return false
-  } else if (payload.username.length < 3 || payload.password.length < 5 || validateEmail(payload.email)) {
+  } else if (payload.username.length < 3 || payload.password.length < 5 || !validateEmail(payload.email)) {
+    console.log("test");
     return false
   } else {
     return true;
@@ -27,7 +28,7 @@ exports.validateCreateAccount = function (payload) {
     return false
   } else if ([payload.username, payload.password, payload.email, payload.permissionId].includes(undefined)) {
     return false
-  } else if (payload.username.length < 3 || payload.password.length < 5 || validateEmail(payload.email)) {
+  } else if (payload.username.length < 3 || payload.password.length < 5 || !validateEmail(payload.email)) {
     return false
   } else {
     return true;
@@ -74,10 +75,10 @@ exports.validateCompanyOrder = function (payload) {
 
 function validateEmail(email) {
   emailRegExp = /\S+@\S+\.\S+/;
-  if (!emailRegExp.test(email)) {
-    return false;
-  } else {
+  if (emailRegExp.test(email)) {
     return true;
+  } else {
+    return false;
   }
 }
 
