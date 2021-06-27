@@ -1,10 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Dashboard from '../../layout/Dashboard/Dashboard';
 import SimpleCard from '../../components/SimpleCard/SimpleCard';
 
 import styled from 'styled-components';
 import Card from '@material-ui/core/Card';
-import Typography from '@material-ui/core/Typography';
 
 //TODO: REFACTOR
 
@@ -18,7 +17,6 @@ const CardGridWrapper = styled.div`
 const FullWidthCard = styled(Card)`
   padding: 1rem;
   background-color: #e3e3e3;
-
 `;
 
 const CardCell = styled.div`
@@ -50,19 +48,9 @@ const CardDataValue = styled.p``;
 
 const Heading = styled.h2`
   margin-bottom: 2rem;
-`
+`;
 
 export default function Root () {
-
-    const [data, setData] = useState({})
-
-    useEffect(() => {
-        const url = ''
-        fetch(url)
-        .then(response => response.json())
-        .then(data => setData(data));
-
-    }, [])
 
     return (
         <Dashboard>
@@ -93,14 +81,13 @@ export default function Root () {
                     <CardCell>
                         <CardDataTitle>Data zmaówienia:</CardDataTitle>
                         <CardDataValue tag="date">2021-12-1</CardDataValue>
-                    </CardCell>                    <CardCell>
-                        <CardDataTitle>Data zmaówienia:</CardDataTitle>
-                        <CardDataValue tag="date">2021-12-1</CardDataValue>
-                    </CardCell>
+                    </CardCell> <CardCell>
+                    <CardDataTitle>Data zmaówienia:</CardDataTitle>
+                    <CardDataValue tag="date">2021-12-1</CardDataValue>
+                </CardCell>
                 </CardContentWrapper>
             </FullWidthCard>
             Ostatnie zamówienie (coś na wzór informacji z aplikacji Chia)
         </Dashboard>
     );
-
 }
