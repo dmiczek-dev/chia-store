@@ -107,7 +107,7 @@ exports.createAccount = async (req, res) => {
   const password = req.body.password;
   const email = req.body.email;
   const hashedPassword = await hashPassword(password)
-  const permissionId = req.body.permission_id
+  const permissionId = req.body.permissionId
 
   client
     .query('INSERT INTO users(user_id, username, password, email, active, jwt_refresh, deleted, permission_id) VALUES (DEFAULT, $1, $2, $3, TRUE, NULL, FALSE, $4)', [username, hashedPassword, email, permissionId]).then(() => {
