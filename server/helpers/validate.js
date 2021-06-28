@@ -1,5 +1,5 @@
 const validateUserLogin = function (payload) {
-    return !(payload?.username?.length < 3 || payload.password?.length < 5);
+    return (payload?.username?.length > 3 && payload.password?.length > 5);
 };
 exports.validateUserLogin = (payload) => {
     validateUserLogin(payload);
