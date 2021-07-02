@@ -2,17 +2,16 @@ const Joi = require('joi');
 const jwt = require('jsonwebtoken');
 const { decodeToken } = require('../helpers/auth');
 
-function validateToken(req) {
+async function validateToken(req) {
   const token = req.cookies.JWT;
   if (token) {
     jwt.verify(token, process.env.TOKEN_SECRET, (err, payload) => {
       if (err) {
         return res.status(400).send({ message: 'Invalid token' });
       }
-      return true;
     })
   } else {
-    return res.status(400).send({ message: 'Unauthorized request' });
+    return res.status(400).send({ message: 'Missing token' });
   }
 }
 
@@ -20,22 +19,18 @@ function validateRefreshToken(req) {
   return req.cookies.refreshToken !== undefined;
 }
 
-function validateAdmin(req) {
-  if (validateToken(req)) {
-    const payload = decodeToken(req)
-    return payload?.permission === 'ADMIN';
-  } else {
-    return false;
-  }
+async function validateAdmin(req) {
+  await validateToken(req);
+  const payload = decodeToken(req)
+  console.log(payload);
+  return payload?.permission === 'ADMIN';
 }
 
-function validateUser() {
-  if (validateToken(req)) {
-    const payload = decodeToken(req)
-    return payload?.permission === 'USER';
-  } else {
-    return false;
-  }
+async function validateUser(req) {
+  await validateToken(req);
+  const payload = decodeToken(req)
+  console.log(payload);
+  return payload?.permission === 'USER';
 }
 
 const validateNIP = (value, helpers) => {
@@ -135,6 +130,7 @@ exports.validateUserOrders = function (req, res, next) {
 exports.validateCreateOrder = function (req, res, next) {
 
   if (!validateUser(req)) {
+    console.log("test");
     return res.status(400).send({ message: 'Unauthorized request' })
   }
 
@@ -145,11 +141,15 @@ exports.validateCreateOrder = function (req, res, next) {
     price: Joi.number().required(),
     poolKey: Joi.string().required(),
     farmerKey: Joi.string().required(),
-    orderTypeId: Joi.integer().required(),
-    company: Joi.string().required(),
+    orderTypeId: Joi.number().integer().required(),
+    firstname: Joi.string(),
+    lastname: Joi.string(),
     city: Joi.string().required(),
     street: Joi.string().required(),
     NIP: Joi.custom(validateNIP).required(),
+    company: Joi.string().required(),
+    phone: Joi.string(),
+    isCompany: Joi.boolean()
   })
 
   const schemaCitizenOrder = Joi.object().keys({
@@ -157,11 +157,14 @@ exports.validateCreateOrder = function (req, res, next) {
     price: Joi.number().required(),
     poolKey: Joi.string().required(),
     farmerKey: Joi.string().required(),
-    orderTypeId: Joi.integer().required(),
+    orderTypeId: Joi.number().integer().required(),
     firstname: Joi.string().required(),
     lastname: Joi.string().required(),
     city: Joi.string().required(),
     street: Joi.string().required(),
+    NIP: Joi.custom(validateNIP),
+    phone: Joi.string(),
+    isCompany: Joi.boolean()
   })
 
   try {
@@ -172,6 +175,7 @@ exports.validateCreateOrder = function (req, res, next) {
       validation = schemaCitizenOrder.validate(body)
     }
     if (validation.error) {
+      console.log(validation.error);
       return res.status(400).send({
         status: 'error',
         message: 'Invalid request data'
@@ -192,8 +196,8 @@ exports.validateEditOrder = function (req, res, next) {
   const body = req.body
 
   const schema = Joi.object().keys({
-    orderId: Joi.integer().required(),
-    orderStatusId: Joi.integer().required(),
+    orderId: Joi.number().integer().required(),
+    orderStatusId: Joi.number().integer().required(),
   })
 
   try {
