@@ -1,17 +1,9 @@
-const e = require('express');
 const jwt = require('jsonwebtoken');
 const { getClient } = require('../db/config')
-const { validateAdminPermission, validateUserPermission, validateCitizenOrder, validateCompanyOrder } = require('../helpers/validate')
+const { decodeToken } = require('../helpers/auth');
 
 exports.getAdminOrders = (req, res) => {
     const client = getClient();
-    const token = req.cookies.JWT;
-    const payload = jwt.decode(token);
-
-    if (!validateAdminPermission(payload)) {
-        res.status(403).send({ error: 'Unauthorized request' })
-        return;
-    }
 
     client.query("SELECT * FROM orders").then((result) => {
         res.status(200).send(result.rows);
@@ -23,13 +15,7 @@ exports.getAdminOrders = (req, res) => {
 
 exports.getUserOrders = (req, res) => {
     const client = getClient();
-    const token = req.cookies.JWT
-    const payload = jwt.decode(token);
-
-    if (!validateUserPermission(payload)) {
-        res.status(403).send({ error: 'Unauthorized request' })
-        return;
-    }
+    const payload = decodeToken(req);
 
     client.query("SELECT * FROM orders WHERE user_id = $1", [payload.userId]).then((result) => {
         res.status(200).send(result.rows);
@@ -39,24 +25,13 @@ exports.getUserOrders = (req, res) => {
 }
 
 exports.createOrder = (req, res) => {
-    if (req.body.isCompany) {
-        if (!validateCompanyOrder(req.body)) {
-            res.status(404).send({ error: 'Validation error' })
-            return;
-        }
-    } else {
-        if (!validateCitizenOrder(req.body)) {
-            res.status(404).send({ error: 'Validation error' })
-            return;
-        }
-    }
 
     const client = getClient();
     const plots = req.body.plots;
     const price = req.body.price;
     const poolKey = req.body.poolKey;
     const farmerKey = req.body.farmerKey;
-    const orderStatusId = req.body.orderStatusId;
+    const orderStatusId = 1; // 1 = NOWE
     const orderTypeId = req.body.orderTypeId;
     const currentDate = new Date();
     const firstname = req.body.firstname;
@@ -67,13 +42,7 @@ exports.createOrder = (req, res) => {
     const NIP = req.body.NIP;
     const phone = req.body.phone;
 
-    const token = req.cookies.JWT
-    const payload = jwt.decode(token);
-
-    if (!validateUserPermission(payload)) {
-        res.status(403).send({ error: 'Unauthorized request' })
-        return;
-    }
+    const payload = decodeToken(req);
 
     client.query("INSERT INTO orders(transaction_id, plots, price, date, pool_key, farmer_key, user_id, order_status_id, order_type_id, fistname, lastname, company, city, street, NIP, phone) VALUES(NULL, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)",
         [plots, price, currentDate, poolKey, farmerKey, payload.userId, orderStatusId, orderTypeId, firstname, lastname, company, city, street, NIP, phone]).then(() => {
@@ -87,8 +56,7 @@ exports.editOrder = (req, res) => {
     const client = getClient();
     const orderId = req.body.orderId;
     const orderStatusId = req.body.orderStatusId
-    const token = req.cookies.JWT
-    const payload = jwt.decode(token);
+    const payload = decodeToken(token);
 
     if (!validateAdminPermission(payload)) {
         res.status(403).send({ error: 'Unauthorized request' })
@@ -105,8 +73,7 @@ exports.editOrder = (req, res) => {
 
 exports.getOrderStatus = (req, res) => {
     const client = getClient();
-    const token = req.cookies.JWT
-    const payload = jwt.decode(token);
+    const payload = decodeToken(token);
 
     if (!validateAdminPermission(payload)) {
         res.status(403).send({ error: 'Unauthorized request' })
@@ -122,8 +89,7 @@ exports.getOrderStatus = (req, res) => {
 
 exports.getOrderTypes = (req, res) => {
     const client = getClient();
-    const token = req.cookies.JWT
-    const payload = jwt.decode(token);
+    const payload = decodeToken(token);
 
     if (!validateAdminPermission(payload)) {
         res.status(403).send({ error: 'Unauthorized request' })

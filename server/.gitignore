@@ -123,3 +123,9 @@ dist/
 # Temporary folders
 tmp/
 temp/
+
+### Webstorm ###
+.idea/
+
+### VisualStudioCode ###
+.vscode/

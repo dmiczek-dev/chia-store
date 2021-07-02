@@ -1,9 +1,14 @@
 {
-  "name": "server",
-  "version": "0.0.0",
+  "name": "chia-farming",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "npx nodemon --exec babel-node ./app.js",
+    "dev": "babel-node ./app.js",
+    "clean": "rm -rf dist",
+    "build": "npm run clean && babel ./app.js --out-dir dist --copy-files",
+    "prod": "node ./app.js",
+    "babel-version": "babel --version"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
@@ -12,11 +17,16 @@
     "debug": "~2.6.9",
     "dotenv": "^10.0.0",
     "express": "~4.16.1",
+    "joi": "^17.4.0",
     "jsonwebtoken": "^8.5.1",
     "morgan": "~1.9.1",
     "pg": "^8.6.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.12.10",
+    "@babel/core": "^7.12.10",
+    "@babel/node": "^7.12.10",
+    "@babel/preset-env": "^7.12.10",
     "nodemon": "^2.0.7"
   }
 }
