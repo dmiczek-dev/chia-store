@@ -1,21 +1,14 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
-const { generateAccessToken, hashPassword } = require('../helpers/auth');
+const { generateAccessToken, hashPassword, decodeToken } = require('../helpers/auth');
 const { getClient } = require('../db/config')
-const { validateUserRegister, validateUserLogin, validateCreateAccount } = require('../helpers/validate')
 
 exports.login = (req, res) => {
-  if (!validateUserLogin(req.body)) {
-    res.status(404).send({ error: 'Validation error' })
-    return;
-  }
-
   const client = getClient();
   const username = req.body.username;
   const password = req.body.password;
 
-  // validate user
   client
     .query('SELECT * FROM users WHERE username = $1', [username])
     .then((result) => {
@@ -62,24 +55,7 @@ exports.login = (req, res) => {
     });
 };
 
-exports.logout = (req, res) => {
-  const client = getClient();
-  const token = req.cookies.JWT;
-  const payload = jwt.decode(token);
-
-  client.query('UPDATE users SET jwt_refresh = null WHERE user_id = $1', [payload.userId]).then(() => {
-    res.status(200).send();
-  }).catch((err) => {
-    res.status(500).send({ error: err })
-  })
-}
-
 exports.register = async (req, res) => {
-  if (!validateUserRegister(req.body)) {
-    res.status(404).send({ error: 'Validation error' })
-    return;
-  }
-
   const client = getClient();
   const username = req.body.username;
   const password = req.body.password;
@@ -87,12 +63,11 @@ exports.register = async (req, res) => {
   const hashedPassword = await hashPassword(password)
   const permissionId = '2' // permissionId = 2 (User)
 
-  // check if username or email is taken
   client.query('SELECT username, email FROM users WHERE username = $1 OR email = $2', [username, email]).then((result) => {
     if (result.rowCount === 0) {
       client
         .query('INSERT INTO users(user_id, username, password, email, active, jwt_refresh, deleted, permission_id) VALUES (DEFAULT, $1, $2, $3, TRUE, NULL, FALSE, $4)', [username, hashedPassword, email, permissionId]).then(() => {
-          res.status(200).send();
+          res.status(200).send({ message: 'User registered successfully' });
         }).catch((err) => {
           res.status(500).send({ error: err })
         })
@@ -107,10 +82,7 @@ exports.register = async (req, res) => {
 };
 
 exports.createAccount = async (req, res) => {
-  if (!validateCreateAccount(req.body)) {
-    res.status(404).send({ error: 'Validation error' })
-    return;
-  }
+  const payload = decodeToken(req);
 
   const client = getClient();
   const username = req.body.username;
@@ -121,22 +93,28 @@ exports.createAccount = async (req, res) => {
 
   client
     .query('INSERT INTO users(user_id, username, password, email, active, jwt_refresh, deleted, permission_id) VALUES (DEFAULT, $1, $2, $3, TRUE, NULL, FALSE, $4)', [username, hashedPassword, email, permissionId]).then(() => {
-      res.status(200).send();
+      res.status(200).send({ message: 'User registered successfully' });
     }).catch((err) => {
       res.status(500).send({ error: err })
     })
 
 };
 
+exports.logout = (req, res) => {
+  const client = getClient();
+  const payload = decodeToken(req);
+
+  client.query('UPDATE users SET jwt_refresh = null WHERE user_id = $1', [payload.userId]).then(() => {
+    res.status(200).send({ message: 'User logout successfully' });
+  }).catch((err) => {
+    res.status(500).send({ error: err })
+  })
+}
+
 exports.refreshToken = (req, res) => {
   const refreshToken = req.body.token
 
-  if (!refreshToken) {
-    return res.status(401)
-  }
-
   // Check if refreshToken exists in DB
-
   const validToken = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
 
   if (!validToken) {
@@ -144,6 +122,5 @@ exports.refreshToken = (req, res) => {
   }
 
   const accessToken = generateAccessToken({ id: 1 })
-
   res.send({ accessToken })
 }

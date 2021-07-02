@@ -14,3 +14,10 @@ exports.hashPassword = async function (plainText) {
   })
   return hashedPassword
 }
+
+exports.decodeToken = function (req) {
+  const token = req.cookies.JWT;
+  if (token) {
+    return jwt.decode(token);
+  }
+}
