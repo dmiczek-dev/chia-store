@@ -3,7 +3,17 @@ const jwt = require('jsonwebtoken');
 const { decodeToken } = require('../helpers/auth');
 
 function validateToken(req) {
-  return req.cookies.JWT !== undefined;
+  const token = req.cookies.JWT;
+  if (token) {
+    jwt.verify(token, process.env.TOKEN_SECRET, (err, payload) => {
+      if (err) {
+        return res.status(400).send({ message: 'Invalid token' });
+      }
+      return true;
+    })
+  } else {
+    return res.status(400).send({ message: 'Unauthorized request' });
+  }
 }
 
 function validateRefreshToken(req) {
@@ -19,7 +29,7 @@ function validateAdmin(req) {
   }
 }
 
-function validateUser(payload) {
+function validateUser() {
   if (validateToken(req)) {
     const payload = decodeToken(req)
     return payload?.permission === 'USER';
