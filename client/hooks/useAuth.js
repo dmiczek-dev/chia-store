@@ -28,13 +28,14 @@ function useAuth () {
                     setLoading(false);
                 } else {
                     console.log('Refesh failed.');
-                    router.push('/app/login')
+                    router.push('/login')
                 }
             } catch (error) {
                 console.error(
                     'You have an error in your code or there are Network issues.',
                     error,
                 );
+                router.push('/login')
             }
         }
         checkToken();

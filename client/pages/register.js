@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { Button, TextField, Box } from '@material-ui/core';
-import { RegisterWrapper, RegisterContainer, Heading, Form } from '../../styles/Register.styles';
+import { RegisterWrapper, RegisterContainer, Heading, Form } from '../styles/Register.styles';
 
 const Register = () => {
     const {
