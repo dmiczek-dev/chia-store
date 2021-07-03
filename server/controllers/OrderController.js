@@ -1,21 +1,18 @@
-const jwt = require('jsonwebtoken');
 const { getClient } = require('../db/config')
 const { decodeToken } = require('../helpers/auth');
 
-exports.getAdminOrders = (req, res) => {
+exports.getAdminOrders = (req, res, next) => {
     const client = getClient();
-
     client.query("SELECT * FROM orders").then((result) => {
         res.status(200).send(result.rows);
     }).catch((err) => {
         res.status(500).send({ error: err })
     })
-
 }
 
-exports.getUserOrders = (req, res) => {
+exports.getUserOrders = (req, res, next) => {
     const client = getClient();
-    const payload = decodeToken(req);
+    const payload = req.payload;
 
     client.query("SELECT * FROM orders WHERE user_id = $1", [payload.userId]).then((result) => {
         res.status(200).send(result.rows);

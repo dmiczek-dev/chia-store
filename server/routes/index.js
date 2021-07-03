@@ -7,8 +7,8 @@ router.get('/', (req, res) => {
   res.send({ title: 'Chia Farming' });
 });
 
-router.get('/protected', authenticate, (req, res) => {
-  res.send({ title: 'Display only when logged in!' });
+router.post('/protected', authenticate, (req, res) => {
+  res.send({ title: 'Display only when logged in!', user: req.payload.userId });
 });
 
 module.exports = router;

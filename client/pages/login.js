@@ -2,8 +2,10 @@ import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { Button, TextField, Box } from '@material-ui/core';
 import { LoginWrapper, LoginContainer, Heading, Form } from '../styles/Login.styles';
+import { useRouter } from 'next/router';
 
 const Login = () => {
+    //TODO Refactor
     const {
         login,
         handleSubmit,
@@ -14,7 +16,7 @@ const Login = () => {
         { mode: 'onBlur' });
 
     const url = 'http://localhost:3001/login';
-
+    const router = useRouter()
     const onSubmit = async (data) => {
         try {
             const response = await fetch(url, {
@@ -30,10 +32,9 @@ const Login = () => {
                 alert('Loged in a');
                 const data = await response.json();
                 console.dir(data)
-                // await login({ jwt_token, jwt_token_expiry });
+                router.push('/app')
             } else {
                 console.log('Login failed.');
-                // https://github.com/developit/unfetch#caveats
                 let error = new Error(response.statusText);
                 error.response = response;
                 throw error;

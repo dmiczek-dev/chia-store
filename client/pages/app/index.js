@@ -4,6 +4,7 @@ import SimpleCard from '../../components/SimpleCard/SimpleCard';
 
 import styled from 'styled-components';
 import Card from '@material-ui/core/Card';
+import { setAccessToken } from '../../utils/accessToken';
 
 //TODO: REFACTOR
 
@@ -51,9 +52,41 @@ const Heading = styled.h2`
 `;
 
 export default function Root () {
+    const fetchData = async () => {
+        try {
+            const res = await fetch('http://localhost:3001/', {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Cache-Control': 'no-cache',
+                },
+            })
+            if (res.status === 200) {
+                const { accessToken } = await res.json();
+                setAccessToken(accessToken);
+                setLoading(false);
+                return true;
+            } else {
+                console.log('Refesh failed.');
+                // router.push('/login')
+                return false;
+            }
+        } catch (error) {
+            console.error(
+                'You have an error in your code or there are Network issues.',
+                error,
+            );
+            return false;
+            // router.push('/login')
+        }
+    }
+    useEffect(() => {
+
+    }, [])
 
     return (
-        <Dashboard>
+        <>
 
             <CardGridWrapper>
                 <SimpleCard title="W sumie wyplotowaliśmy" amount="20000+" subtitle="plotów typu k32"/>
@@ -88,6 +121,6 @@ export default function Root () {
                 </CardContentWrapper>
             </FullWidthCard>
             Ostatnie zamówienie (coś na wzór informacji z aplikacji Chia)
-        </Dashboard>
+        </>
     );
 }

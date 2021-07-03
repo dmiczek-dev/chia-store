@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 exports.generateAccessToken = function (payload) {
-  return jwt.sign(payload, process.env.TOKEN_SECRET, { expiresIn: 86400 }); // 86400
+  return jwt.sign(payload, process.env.TOKEN_SECRET, { expiresIn: 30 }); // 86400
 };
 
 exports.hashPassword = async function (plainText) {
@@ -15,6 +15,8 @@ exports.hashPassword = async function (plainText) {
   return hashedPassword
 }
 
+
+//TODO: replace with authenticate middleware
 exports.decodeToken = function (req) {
   const token = req.cookies.JWT;
   if (token) {

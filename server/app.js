@@ -15,6 +15,7 @@ const app = express();
 const corsOptions = {
   origin: process.env.CORS_ORIGIN,
   optionSuccessStatus: process.env.CORS_OSS,
+  credentials: true,
 };
 
 // Connect to PostgreSQL

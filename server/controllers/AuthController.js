@@ -12,7 +12,6 @@ exports.login = (req, res) => {
   client
     .query('SELECT * FROM users WHERE username = $1', [username])
     .then((result) => {
-      console.log(result.rows.length);
       if (result.rows.length === 0) {
         res.status(401).send({
           message: 'Invalid username or password'
@@ -27,16 +26,16 @@ exports.login = (req, res) => {
               const accessToken = generateAccessToken({ userId: userFromDB.user_id, permission: permission });
               const refreshToken = jwt.sign({ userId: userFromDB.user_id, permission: permission }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: 525600 });
 
-              // Save refresh Token in DB
+              //TODO: Save refresh Token in DB
               client
                 .query('UPDATE users SET jwt_refresh = $1 WHERE user_id = $2', [refreshToken, userFromDB.user_id])
                 .then(() => {
-                  res.cookie('JWT', accessToken, {
+                  res.cookie('refreshToken', refreshToken, {
                     maxAge: 86400000,
                     httpOnly: true,
                   });
 
-                  res.status(200).send({ accessToken, refreshToken });
+                  res.status(200).send({ accessToken });
                 })
             } else {
               res.status(401).send({
@@ -73,7 +72,6 @@ exports.register = async (req, res) => {
         })
     } else {
       res.status(400).send({ error: 'Username or email taken' })
-      return;
     }
   }).catch((err) => {
     res.status(500).send({ error: err })
@@ -112,15 +110,17 @@ exports.logout = (req, res) => {
 }
 
 exports.refreshToken = (req, res) => {
-  const refreshToken = req.body.token
+  //TODO: Generate new refreshToken? Validate access token before generate new access?
+  const refreshToken = req.cookies.refreshToken;
 
-  // Check if refreshToken exists in DB
-  const validToken = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
-
-  if (!validToken) {
-    return res.status(403)
+  if (!refreshToken) {
+    return res.status(401)
   }
-
-  const accessToken = generateAccessToken({ id: 1 })
-  res.send({ accessToken })
+  //TODO Check if refreshToken exists in DB
+  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, payload) => {
+    if (err) return res.sendStatus(403)
+    //TODO: Check if refreshToken payload is correct, should be the same as access
+    const accessToken = generateAccessToken(payload)
+    res.send({ accessToken })
+  })
 }

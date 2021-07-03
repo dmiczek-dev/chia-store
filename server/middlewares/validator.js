@@ -1,31 +1,7 @@
 const Joi = require('joi');
-const jwt = require('jsonwebtoken');
-const { decodeToken } = require('../helpers/auth');
-
-function validateToken(req) {
-  return req.cookies.JWT !== undefined;
-}
 
 function validateRefreshToken(req) {
   return req.cookies.refreshToken !== undefined;
-}
-
-function validateAdmin(req) {
-  if (validateToken(req)) {
-    const payload = decodeToken(req)
-    return payload?.permission === 'ADMIN';
-  } else {
-    return false;
-  }
-}
-
-function validateUser(payload) {
-  if (validateToken(req)) {
-    const payload = decodeToken(req)
-    return payload?.permission === 'USER';
-  } else {
-    return false;
-  }
 }
 
 const validateNIP = (value, helpers) => {
@@ -107,18 +83,16 @@ exports.validateRefreshToken = function (req, res, next) {
 }
 
 exports.validateAdminOrders = function (req, res, next) {
-  if (!validateAdmin(req)) {
-    return res.status(400).send({ message: 'Unauthorized request' })
-  };
-
+  if (req.payload?.permission !== 'ADMIN') {
+    return res.sendStatus(401)
+  }
   next();
 }
 
 exports.validateUserOrders = function (req, res, next) {
-  if (!validateUser(req)) {
-    return res.status(400).send({ message: 'Unauthorized request' })
+  if (req.payload?.permission !== 'USER') {
+    return res.sendStatus(401)
   }
-
   next();
 }
 
@@ -200,5 +174,3 @@ exports.validateEditOrder = function (req, res, next) {
 
   next();
 }
-
-
