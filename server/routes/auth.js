@@ -1,13 +1,13 @@
 const express = require("express");
 const AuthController = require("../controllers/AuthController");
-const Validator = require('../middlewares/validator');
+const { validateSignIn, validateSignUp } = require('../middlewares/validate');
+const { authenticate, checkRefreshToken } = require('../middlewares/authenticate');
 
 const router = express.Router();
 
-router.post("/login", Validator.validateSignIn, AuthController.login);
-router.post("/register", Validator.validateSignUp, AuthController.register);
-router.post("/create-account", Validator.validateSignUp, AuthController.createAccount);
-router.post("/logout", Validator.validateSignOut, AuthController.logout);
-router.post("/refresh-token", Validator.validateRefreshToken, AuthController.refreshToken);
+router.post("/login", [validateSignIn, AuthController.login]);
+router.post("/register", [validateSignUp, AuthController.register]);
+router.post("/logout", [authenticate, AuthController.logout]);
+router.post("/refresh-token", [checkRefreshToken, AuthController.refreshToken]);
 
 module.exports = router;

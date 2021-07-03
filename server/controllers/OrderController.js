@@ -1,5 +1,4 @@
 const { getClient } = require('../db/config')
-const { decodeToken } = require('../helpers/auth');
 
 exports.getAdminOrders = (req, res, next) => {
     const client = getClient();
@@ -22,8 +21,9 @@ exports.getUserOrders = (req, res, next) => {
 }
 
 exports.createOrder = (req, res) => {
-
     const client = getClient();
+    const payload = req.payload;
+
     const plots = req.body.plots;
     const price = req.body.price;
     const poolKey = req.body.poolKey;
@@ -39,8 +39,6 @@ exports.createOrder = (req, res) => {
     const NIP = req.body.NIP;
     const phone = req.body.phone;
 
-    const payload = decodeToken(req);
-
     client.query("INSERT INTO orders(transaction_id, plots, price, date, pool_key, farmer_key, user_id, order_status_id, order_type_id, firstname, lastname, company, city, street, NIP, phone) VALUES(NULL, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)",
         [plots, price, currentDate, poolKey, farmerKey, payload.userId, orderStatusId, orderTypeId, firstname, lastname, company, city, street, NIP, phone]).then(() => {
             res.status(200).send();
@@ -51,14 +49,10 @@ exports.createOrder = (req, res) => {
 
 exports.editOrder = (req, res) => {
     const client = getClient();
+    const payload = req.payload;
+
     const orderId = req.body.orderId;
     const orderStatusId = req.body.orderStatusId
-    const payload = decodeToken(token);
-
-    if (!validateAdminPermission(payload)) {
-        res.status(403).send({ error: 'Unauthorized request' })
-        return;
-    }
 
     client.query("UPDATE orders SET order_status_id = $3 WHERE user_id = $1 AND order_id = $2 AND order_status_id IN (SELECT order_status_id FROM order_status WHERE name = 'NOWE')",
         [payload.userId, orderId, orderStatusId]).then(() => {
@@ -70,12 +64,6 @@ exports.editOrder = (req, res) => {
 
 exports.getOrderStatus = (req, res) => {
     const client = getClient();
-    const payload = decodeToken(token);
-
-    if (!validateAdminPermission(payload)) {
-        res.status(403).send({ error: 'Unauthorized request' })
-        return;
-    }
 
     client.query("SELECT * FROM order_status").then((result) => {
         res.status(200).send(result.rows);
@@ -86,12 +74,6 @@ exports.getOrderStatus = (req, res) => {
 
 exports.getOrderTypes = (req, res) => {
     const client = getClient();
-    const payload = decodeToken(token);
-
-    if (!validateAdminPermission(payload)) {
-        res.status(403).send({ error: 'Unauthorized request' })
-        return;
-    }
 
     client.query("SELECT * FROM order_types").then((result) => {
         res.status(200).send(result.rows);

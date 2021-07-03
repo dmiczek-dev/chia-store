@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
-const { generateAccessToken, hashPassword, decodeToken } = require('../helpers/auth');
+const { generateAccessToken, hashPassword } = require('../helpers/auth');
 const { getClient } = require('../db/config')
 
 exports.login = (req, res) => {
@@ -79,28 +79,9 @@ exports.register = async (req, res) => {
 
 };
 
-exports.createAccount = async (req, res) => {
-  const payload = decodeToken(req);
-
-  const client = getClient();
-  const username = req.body.username;
-  const password = req.body.password;
-  const email = req.body.email;
-  const hashedPassword = await hashPassword(password)
-  const permissionId = req.body.permissionId
-
-  client
-    .query('INSERT INTO users(user_id, username, password, email, active, jwt_refresh, deleted, permission_id) VALUES (DEFAULT, $1, $2, $3, TRUE, NULL, FALSE, $4)', [username, hashedPassword, email, permissionId]).then(() => {
-      res.status(200).send({ message: 'User registered successfully' });
-    }).catch((err) => {
-      res.status(500).send({ error: err })
-    })
-
-};
-
 exports.logout = (req, res) => {
   const client = getClient();
-  const payload = decodeToken(req);
+  const payload = req.payload;
 
   client.query('UPDATE users SET jwt_refresh = null WHERE user_id = $1', [payload.userId]).then(() => {
     res.status(200).send({ message: 'User logout successfully' });
@@ -111,16 +92,19 @@ exports.logout = (req, res) => {
 
 exports.refreshToken = (req, res) => {
   //TODO: Generate new refreshToken? Validate access token before generate new access?
-  const refreshToken = req.cookies.refreshToken;
+  //TODO: Check if refreshToken payload is correct, should be the same as access
 
-  if (!refreshToken) {
-    return res.status(401)
-  }
-  //TODO Check if refreshToken exists in DB
-  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, payload) => {
-    if (err) return res.sendStatus(403)
-    //TODO: Check if refreshToken payload is correct, should be the same as access
-    const accessToken = generateAccessToken(payload)
-    res.send({ accessToken })
+  const client = getClient();
+  const token = req.cookies.refreshToken;
+  const payload = req.payload;
+
+  client.query('SELECT jwt_refresh FROM users WHERE user_id = $1', [payload.userId]).then((result) => {
+    const dbToken = result.rows[0].jwt_refresh;
+    if (dbToken !== token) {
+      return res.status(400).send({ error: 'Refresh token is not avalivle' })
+    }
   })
+
+  const accessToken = generateAccessToken(payload)
+  res.status(200).send({ accessToken: accessToken })
 }

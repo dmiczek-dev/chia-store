@@ -8,8 +8,23 @@ exports.authenticate = function (req, res, next) {
 
   jwt.verify(token, process.env.TOKEN_SECRET, (err, payload) => {
     if (err) {
-      return res.sendStatus(err)
+      return res.sendStatus(403)
     }
+    req.payload = payload
+    next()
+  })
+}
+
+exports.checkRefreshToken = function (req, res, next) {
+  const token = req.cookies.refreshToken;
+
+  if (token === null) return res.sendStatus(401);
+
+  jwt.verify(token, process.env.TOKEN_SECRET, (err, payload) => {
+    if (err) {
+      return res.sendStatus(403);
+    }
+
     req.payload = payload
     next()
   })
