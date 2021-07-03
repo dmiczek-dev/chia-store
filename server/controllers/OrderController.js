@@ -41,7 +41,7 @@ exports.createOrder = (req, res) => {
 
     const payload = decodeToken(req);
 
-    client.query("INSERT INTO orders(transaction_id, plots, price, date, pool_key, farmer_key, user_id, order_status_id, order_type_id, fistname, lastname, company, city, street, NIP, phone) VALUES(NULL, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)",
+    client.query("INSERT INTO orders(transaction_id, plots, price, date, pool_key, farmer_key, user_id, order_status_id, order_type_id, firstname, lastname, company, city, street, NIP, phone) VALUES(NULL, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)",
         [plots, price, currentDate, poolKey, farmerKey, payload.userId, orderStatusId, orderTypeId, firstname, lastname, company, city, street, NIP, phone]).then(() => {
             res.status(200).send();
         }).catch((err) => {
