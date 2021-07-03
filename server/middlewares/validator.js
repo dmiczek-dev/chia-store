@@ -1,44 +1,9 @@
 const Joi = require('joi');
-<<<<<<< HEAD
-=======
-const jwt = require('jsonwebtoken');
-const { decodeToken } = require('../helpers/auth');
-
-async function validateToken(req) {
-  const token = req.cookies.JWT;
-  if (token) {
-    jwt.verify(token, process.env.TOKEN_SECRET, (err, payload) => {
-      if (err) {
-        return res.status(400).send({ message: 'Invalid token' });
-      }
-    })
-  } else {
-    return res.status(400).send({ message: 'Missing token' });
-  }
-}
->>>>>>> adf75912a367b0f6b10a59230e2c1b9a2a6aa615
 
 function validateRefreshToken(req) {
   return req.cookies.refreshToken !== undefined;
 }
 
-<<<<<<< HEAD
-=======
-async function validateAdmin(req) {
-  await validateToken(req);
-  const payload = decodeToken(req)
-  console.log(payload);
-  return payload?.permission === 'ADMIN';
-}
-
-async function validateUser(req) {
-  await validateToken(req);
-  const payload = decodeToken(req)
-  console.log(payload);
-  return payload?.permission === 'USER';
-}
-
->>>>>>> adf75912a367b0f6b10a59230e2c1b9a2a6aa615
 const validateNIP = (value, helpers) => {
   let nipWithoutDashes = value.replace(/-/g, '');
   let reg = /^[0-9]{10}$/;
@@ -134,7 +99,6 @@ exports.validateUserOrders = function (req, res, next) {
 exports.validateCreateOrder = function (req, res, next) {
 
   if (!validateUser(req)) {
-    console.log("test");
     return res.status(400).send({ message: 'Unauthorized request' })
   }
 
@@ -179,7 +143,6 @@ exports.validateCreateOrder = function (req, res, next) {
       validation = schemaCitizenOrder.validate(body)
     }
     if (validation.error) {
-      console.log(validation.error);
       return res.status(400).send({
         status: 'error',
         message: 'Invalid request data'
