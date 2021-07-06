@@ -105,6 +105,6 @@ exports.refreshToken = (req, res) => {
     }
   })
 
-  const accessToken = generateAccessToken(payload)
+  const accessToken = generateAccessToken({userId: payload.userId, permission: payload.permission})
   res.status(200).send({ accessToken: accessToken })
 }

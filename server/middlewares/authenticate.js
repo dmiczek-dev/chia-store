@@ -20,7 +20,7 @@ exports.checkRefreshToken = function (req, res, next) {
 
   if (token === null) return res.sendStatus(401);
 
-  jwt.verify(token, process.env.TOKEN_SECRET, (err, payload) => {
+  jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (err, payload) => {
     if (err) {
       return res.sendStatus(403);
     }
