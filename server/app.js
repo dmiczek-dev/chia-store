@@ -6,6 +6,7 @@ const indexRoute = require('./routes');
 const authRoutes = require('./routes/auth');
 const orderRoutes = require('./routes/order');
 const userRoutes = require('./routes/user');
+const productRoutes = require('./routes/product');
 const { dbConnect } = require('./db/config');
 const cors = require('cors');
 
@@ -31,6 +32,7 @@ app.use(indexRoute);
 app.use(authRoutes);
 app.use(orderRoutes);
 app.use(userRoutes);
+app.use(productRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log('Server is up!');
