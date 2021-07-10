@@ -91,11 +91,10 @@ exports.validateCreateOrder = function (req, res, next) {
   const body = req.body;
 
   const schemaCompanyOrder = Joi.object().keys({
+    productId: Joi.number().integer().required(),
     plots: Joi.number().required(),
-    price: Joi.number().required(),
     poolKey: Joi.string().required(),
     farmerKey: Joi.string().required(),
-    orderTypeId: Joi.number().integer().required(),
     firstname: Joi.string(),
     lastname: Joi.string(),
     city: Joi.string().required(),
@@ -103,30 +102,29 @@ exports.validateCreateOrder = function (req, res, next) {
     NIP: Joi.custom(validateNip).required(),
     company: Joi.string().required(),
     phone: Joi.string(),
-    isCompany: Joi.boolean()
+    buyerType: Joi.string()
   })
 
-  const schemaCitizenOrder = Joi.object().keys({
+  const schemaIndividualOrder = Joi.object().keys({
+    productId: Joi.number().integer().required(),
     plots: Joi.number().required(),
-    price: Joi.number().required(),
     poolKey: Joi.string().required(),
     farmerKey: Joi.string().required(),
-    orderTypeId: Joi.number().integer().required(),
     firstname: Joi.string().required(),
     lastname: Joi.string().required(),
     city: Joi.string().required(),
     street: Joi.string().required(),
     NIP: Joi.custom(validateNip),
     phone: Joi.string(),
-    isCompany: Joi.boolean()
+    buyerType: Joi.string()
   })
 
   try {
     let validation;
-    if (body.isCompany) {
+    if (body.buyerType === "company") {
       validation = schemaCompanyOrder.validate(body)
     } else {
-      validation = schemaCitizenOrder.validate(body)
+      validation = schemaIndividualOrder.validate(body)
     }
     if (validation.error) {
       return res.status(400).send({
@@ -160,6 +158,77 @@ exports.validateEditOrder = function (req, res, next) {
   } catch (err) {
     throw err;
   }
+  next();
+}
+
+exports.validateCreateProduct = function (req, res, next) {
+  const body = req.body
+
+  const schema = Joi.object().keys({
+    name: Joi.string().required(),
+    price: Joi.number().required(),
+    orderStatusId: Joi.number().integer().required()
+  })
+
+  try {
+    const validation = schema.validate(body)
+    if (validation.error) {
+      return res.status(400).send({
+        status: 'error',
+        message: 'Invalid request data'
+      })
+    }
+  } catch (err) {
+    throw err
+  }
 
   next();
 }
+
+exports.validateEditProduct = function (req, res, next) {
+  const body = req.body
+
+  const schema = Joi.object().keys({
+    productId: Joi.number().integer().required(),
+    name: Joi.string().required(),
+    price: Joi.number().required(),
+    orderStatusId: Joi.number().integer().required()
+  })
+
+  try {
+    const validation = schema.validate(body)
+    if (validation.error) {
+      return res.status(400).send({
+        status: 'error',
+        message: 'Invalid request data'
+      })
+    }
+  } catch (err) {
+    throw err
+  }
+
+  next();
+}
+
+exports.validateDeleteProduct = function (req, res, next) {
+  const body = req.body
+
+  const schema = Joi.object().keys({
+    productId: Joi.number().integer().required(),
+  })
+
+  try {
+    const validation = schema.validate(body)
+    if (validation.error) {
+      return res.status(400).send({
+        status: 'error',
+        message: 'Invalid request data'
+      })
+    }
+  } catch (err) {
+    throw err
+  }
+
+  next();
+}
+
