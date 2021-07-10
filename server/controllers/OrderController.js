@@ -1,8 +1,10 @@
 const { getClient } = require('../db/config')
+const axios = require('axios');
+const querystring = require('querystring');
 
 exports.getAdminOrders = (req, res, next) => {
     const client = getClient();
-    client.query("SELECT * FROM orders").then((result) => {
+    client.query("SELECT * FROM orders_view").then((result) => {
         res.status(200).send(result.rows);
     }).catch((err) => {
         res.status(500).send({ error: err })
@@ -13,7 +15,7 @@ exports.getUserOrders = (req, res, next) => {
     const client = getClient();
     const payload = req.payload;
 
-    client.query("SELECT * FROM orders WHERE user_id = $1", [payload.userId]).then((result) => {
+    client.query("SELECT * FROM orders_view WHERE user_id = $1", [payload.userId]).then((result) => {
         res.status(200).send(result.rows);
     }).catch((err) => {
         res.status(500).send({ error: err })
@@ -80,4 +82,28 @@ exports.getOrderTypes = (req, res) => {
     }).catch((err) => {
         res.status(500).send({ error: err })
     })
+}
+
+exports.payOrder = (req, res) => {
+    const client = getClient();
+    const orderId = req.body.orderId;
+
+    axios({
+        method: 'post',
+        url: 'https://secure.payu.com/pl/standard/user/oauth/authorize',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        data: querystring.stringify({
+            grant_type: 'client_credentials',
+            client_id: process.env.PAYU_ID,
+            client_secret: process.env.PAYU_SECRET
+        })
+    }).then(function (response) {
+
+
+
+    }).catch(function (error) {
+        console.log(error);
+    })
+
+    res.sendStatus(200);
 }

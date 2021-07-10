@@ -31,7 +31,7 @@ exports.createAccount = async (req, res) => {
 exports.getUsers = (req, res) => {
     const client = getClient();
 
-    client.query('SELECT * FROM users').then((result) => {
+    client.query('SELECT * FROM users_view').then((result) => {
         res.status(200).send(result.rows);
     }).catch((err) => {
         res.status(500).send({ error: err })
@@ -42,7 +42,7 @@ exports.getUserById = (req, res) => {
     const client = getClient();
     const userId = req.payload.userId;
 
-    client.query('SELECT username, email FROM users WHERE user_id = $1', [userId]).then((result) => {
+    client.query('SELECT username, email FROM users_view WHERE user_id = $1', [userId]).then((result) => {
         res.status(200).send(result.rows);
     }).catch((err) => {
         res.status(500).send({ error: err })

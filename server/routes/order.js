@@ -11,5 +11,6 @@ router.post("/create-order", [authenticate, validateUser, validateCreateOrder, O
 router.post("/edit-order", [authenticate, validateAdmin, validateEditOrder, OrderController.editOrder]);
 router.get("/order-status", [authenticate, OrderController.getOrderStatus]);
 router.get("/order-types", [authenticate, OrderController.getOrderTypes]);
+router.post("/pay-order", OrderController.payOrder)
 
 module.exports = router;
