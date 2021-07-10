@@ -44,8 +44,8 @@ exports.createOrder = (req, res) => {
         const NIP = req.body.NIP;
         const phone = req.body.phone;
 
-        client.query("INSERT INTO orders(plots, price, date, pool_key, farmer_key, user_id, product_id, order_status_id, order_type_id, firstname, lastname, company, city, street, NIP, phone) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING order_id",
-            [plots, totalPrice, currentDate, poolKey, farmerKey, payload.userId, orderStatusId, firstname, lastname, company, city, street, NIP, phone]).then((result) => {
+        client.query("INSERT INTO orders(plots, price, date, pool_key, farmer_key, user_id, product_id, order_status_id, order_type_id, firstname, lastname, company, city, street, NIP, phone, product_id) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) RETURNING order_id",
+            [plots, totalPrice, currentDate, poolKey, farmerKey, payload.userId, orderStatusId, firstname, lastname, company, city, street, NIP, phone, productId]).then((result) => {
                 res.status(200).send(result.rows);
             }).catch((err) => {
                 res.status(500).send({ error: err })
@@ -79,18 +79,6 @@ exports.getOrderStatus = (req, res) => {
         res.status(500).send({ error: err })
     })
 }
-
-exports.getOrderTypes = (req, res) => {
-    const client = getClient();
-
-    client.query("SELECT * FROM order_types").then((result) => {
-        res.status(200).send(result.rows);
-    }).catch((err) => {
-        res.status(500).send({ error: err })
-    })
-}
-
-
 
 exports.payOrder = (req, res) => {
     const client = getClient();

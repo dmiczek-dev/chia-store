@@ -167,7 +167,6 @@ exports.validateCreateProduct = function (req, res, next) {
   const schema = Joi.object().keys({
     name: Joi.string().required(),
     price: Joi.number().required(),
-    orderStatusId: Joi.number().integer().required()
   })
 
   try {
@@ -192,7 +191,6 @@ exports.validateEditProduct = function (req, res, next) {
     productId: Joi.number().integer().required(),
     name: Joi.string().required(),
     price: Joi.number().required(),
-    orderStatusId: Joi.number().integer().required()
   })
 
   try {
