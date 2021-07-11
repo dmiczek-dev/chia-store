@@ -84,7 +84,7 @@ exports.payOrder = (req, res) => {
     const client = getClient();
     const orderId = req.body.orderId;
 
-    //Autoryzacja PayU
+    //Autoryzacja PayU - pobranie tokenu
     axios({
         method: 'post',
         url: 'https://secure.payu.com/pl/standard/user/oauth/authorize',
@@ -98,7 +98,7 @@ exports.payOrder = (req, res) => {
         let accessToken = response.data.accessToken;
 
         //Pobranie informacji o zamówieniu
-        client.query('SELECT * FROM orders WHERE order_id = $1', [orderId]).then((result) => {
+        client.query('SELECT * FROM orders_view WHERE order_id = $1', [orderId]).then((result) => {
             let order = result.rows[0];
 
             //Pobranie informacji o produkcie
@@ -111,10 +111,17 @@ exports.payOrder = (req, res) => {
                     url: 'https://secure.payu.com/api/v2_1/orders',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}` },
                     data: {
+                        "notifyUrl": process.env.PAYU_NOTIFY_URL,
                         "merchantPosId": process.env.PAYU_ID,
-                        "description": "Chia zone",
+                        "description": process.env.PAYU_NAME,
                         "currencyCode": "PLN",
+                        "extOrderId": `${order.order_id}`,
                         "totalAmount": `${order.total_price}`,
+                        "buyer": {
+                            "email": `${order.email}`,
+                            "phone": `${order.phone}`,
+                            "name": `${order.firstname ? order.firstname + ' ' + order.lastname : order.company}`,
+                        },
                         "products": [
                             {
                                 "name": "Cyfrowe pliki (ploty)",
