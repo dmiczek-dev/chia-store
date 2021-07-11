@@ -102,9 +102,11 @@ exports.refreshToken = (req, res) => {
     const dbToken = result.rows[0].jwt_refresh;
     if (dbToken !== token) {
       return res.status(400).send({ error: 'Refresh token is not avalible' })
+    } else {
+      const accessToken = generateAccessToken({ userId: payload.userId, permission: payload.permission })
+      return res.status(200).send({ accessToken: accessToken })
     }
   })
 
-  const accessToken = generateAccessToken({ userId: payload.userId, permission: payload.permission })
-  res.status(200).send({ accessToken: accessToken })
+
 }
