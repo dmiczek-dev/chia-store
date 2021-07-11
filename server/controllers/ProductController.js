@@ -14,8 +14,9 @@ exports.createProduct = (req, res) => {
   const client = getClient();
   const productName = req.body.productName;
   const productPrice = req.body.productPrice;
+  const productActive = req.body.productActive;
 
-  client.query('INSERT INTO products(name, price) VALUES ($1, $2)',
+  client.query('INSERT INTO products(name, price, active) VALUES ($1, $2, $3)',
     [productName, productPrice]).then((result) => {
       res.status(200).send({ message: 'Product created successfully' })
     }).catch((err) => {
@@ -28,9 +29,10 @@ exports.editProduct = (req, res) => {
   const productId = req.body.productId;
   const productName = req.body.productName;
   const productPrice = req.body.productPrice;
+  const productActive = req.body.productActive;
 
-  client.query('UPDATE products SET name = $1, price = $2 WHERE product_id = $3',
-    [productName, productPrice, productId]).then((result) => {
+  client.query('UPDATE products SET name = $1, price = $2, active = $3 WHERE product_id = $4',
+    [productName, productPrice, productActive, productId]).then((result) => {
       res.status(200).send({ message: 'Product changed successfully' })
     }).catch((err) => {
       res.status(500).send({ error: err })
