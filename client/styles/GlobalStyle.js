@@ -12,7 +12,8 @@ export const GlobalStyle = createGlobalStyle`
 
   body {
     font-family: 'Roboto', sans-serif;
-
+    //font-size: 1.6rem;
+    //line-height: 1.4;
     margin: 0;
     padding: 0;
   }
@@ -48,8 +49,6 @@ export const GlobalStyle = createGlobalStyle`
   select,
   textarea {
     font-family: inherit; /* 1 */
-    font-size: 100%; /* 1 */
-    line-height: 1.15; /* 1 */
     margin: 0; /* 2 */
   }
 

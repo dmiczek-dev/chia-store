@@ -7,6 +7,7 @@ import { GlobalStyle } from '../styles/GlobalStyle';
 import { StylesProvider } from '@material-ui/core/styles';
 import Dashboard from '../layout/Dashboard/Dashboard';
 import { useRouter } from 'next/router';
+import useSWR, { SWRConfig } from 'swr'
 
 const theme = {
     primary: '#f2f2f2',
@@ -20,7 +21,15 @@ const theme = {
 };
 
 export default function App ({ Component, pageProps }) {
-    const router = useRouter()
+    const router = useRouter();
+    const swrOptions = {
+        fetcher: (url, token) => fetch(url, {
+            headers: new Headers({
+                'Authorization': 'Bearer '+ token,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }),
+        }).then(res => res.json())
+    }
 
     if (router.pathname.startsWith('/app')) {
         return (
@@ -29,9 +38,11 @@ export default function App ({ Component, pageProps }) {
                 <StylesProvider injectFirst>
                     <StyledThemeProvider theme={theme}>
                         <MaterialThemeProvider theme={theme}>
-                            <Dashboard>
-                                <Component {...pageProps} />
-                            </Dashboard>
+                            <SWRConfig value={swrOptions}>
+                                <Dashboard>
+                                    <Component {...pageProps} />
+                                </Dashboard>
+                            </SWRConfig>
                         </MaterialThemeProvider>
                     </StyledThemeProvider>
                 </StylesProvider>

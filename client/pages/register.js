@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 
 const url = 'http://localhost:3001/register';
 
+//TODO refactor
 const Register = () => {
     const {
         register,
