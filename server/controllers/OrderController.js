@@ -44,8 +44,8 @@ exports.createOrder = (req, res) => {
         const NIP = req.body.NIP;
         const phone = req.body.phone;
 
-        client.query("INSERT INTO orders(plots, price, date, pool_key, farmer_key, user_id, product_id, order_status_id, order_type_id, firstname, lastname, company, city, street, NIP, phone, product_id) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) RETURNING order_id",
-            [plots, totalPrice, currentDate, poolKey, farmerKey, payload.userId, orderStatusId, firstname, lastname, company, city, street, NIP, phone, productId]).then((result) => {
+        client.query("INSERT INTO orders(plots, total_price, date, pool_key, farmer_key, user_id, product_id, order_status_id, firstname, lastname, company, city, street, nip, phone) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) RETURNING order_id",
+            [plots, totalPrice, currentDate, poolKey, farmerKey, payload.userId, productId, orderStatusId, firstname, lastname, company, city, street, NIP, phone]).then((result) => {
                 res.status(200).send(result.rows);
             }).catch((err) => {
                 res.status(500).send({ error: err })
@@ -95,42 +95,42 @@ exports.payOrder = (req, res) => {
             client_secret: process.env.PAYU_SECRET
         })
     }).then(function (response) {
-        let accessToken = response.data.accessToken;
+        let accessToken = response.data.access_token;
+        console.error(accessToken);
 
         //Pobranie informacji o zamówieniu
         client.query('SELECT * FROM orders_view WHERE order_id = $1', [orderId]).then((result) => {
             let order = result.rows[0];
 
             //Pobranie informacji o produkcie
-            client.query('SELECT price FROM products WHERE product_id = $1', [order.product_id]).then((result) => {
-                let productPrice = result.rows[0].price;
+            client.query('SELECT * FROM products WHERE product_id = $1', [order.product_id]).then((result) => {
+                let product = result.rows[0];
 
                 //Wysłanie żądania do PayU
                 axios({
-                    method: 'post',
+                    method: 'POST',
                     url: 'https://secure.payu.com/api/v2_1/orders',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}` },
                     data: {
-                        "notifyUrl": process.env.PAYU_NOTIFY_URL,
-                        "merchantPosId": process.env.PAYU_ID,
-                        "description": process.env.PAYU_NAME,
+                        "customerIp": "127.0.0.1",
+                        "merchantPosId": "4117336",
+                        "description": "Chia Zone",
                         "currencyCode": "PLN",
-                        "extOrderId": `${order.order_id}`,
-                        "totalAmount": `${order.total_price}`,
-                        "buyer": {
-                            "email": `${order.email}`,
-                            "phone": `${order.phone}`,
-                            "name": `${order.firstname ? order.firstname + ' ' + order.lastname : order.company}`,
-                        },
+                        "totalAmount": "21000",
                         "products": [
                             {
-                                "name": "Cyfrowe pliki (ploty)",
-                                "unitPrice": `${productPrice}`,
-                                "quantity": `${order.plots}`
+                                "name": "Wireless Mouse for Laptop",
+                                "unitPrice": "21000",
+                                "quantity": "1"
                             }
                         ]
                     }
-
+                }).then(function (response) {
+                    console.log(response);
+                    res.status(200).send(JSON.stringify(response))
+                }).catch(function (error) {
+                    console.log(error);
+                    res.status(500).send(error)
                 })
 
             }).catch((err) => {
@@ -142,8 +142,6 @@ exports.payOrder = (req, res) => {
     }).catch(function (error) {
         console.log(error);
     })
-
-    res.sendStatus(200);
 }
 
 // data: {
