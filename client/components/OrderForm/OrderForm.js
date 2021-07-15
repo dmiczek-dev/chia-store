@@ -34,9 +34,6 @@ const ActionContainer = styled.div`
 const OrderForm = () => {
     const methods = useForm();
 
-    const { control, handleSubmit } = useForm();
-
-
     const onSubmit = data => console.log(data);
 
     const buyerTypes = {
@@ -79,20 +76,16 @@ const OrderForm = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
-    const [products, setProducts] = useState({})
-    useEffect(() =>{
-
-    } ,[])
-
     return (
         <OrderFormWrapper>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <FormProvider {...methods} >
+            <form onSubmit={methods.handleSubmit(onSubmit)}>
                 <Stepper activeStep={activeStep} orientation="vertical">
                     {steps.map((label, index) => (
                         <Step key={label}>
                             <StepLabel>{label}</StepLabel>
                             <StepContent>
-                                <StepWrapper>{getStepContent(index, control, buyerType, setBuyerType, buyerTypes)}</StepWrapper>
+                                <StepWrapper>{getStepContent(index)}</StepWrapper>
                                 <ActionContainer>
                                     <SingleStep>
                                         <StyledButton disabled={activeStep === 0} onClick={handleBack}>Back</StyledButton>
@@ -111,6 +104,7 @@ const OrderForm = () => {
                     ))}
                 </Stepper>
             </form>
+            </FormProvider>
             {activeStep === steps.length && (
                 <Paper square elevation={0}>
                     <Typography>All steps completed - you&apos;re finished</Typography>

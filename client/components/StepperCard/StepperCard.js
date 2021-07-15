@@ -67,11 +67,11 @@ const StyledInput = styled.input`
 const StepperCard = ( {Icon, title, onChange, value, name,setSelectedValue, selectedValue, price}) => {
     const handleChange = () => {
         setSelectedValue(value);
-        onChange(value)
+
     }
 
     return (
-        <StepperCardWrapper onClick={handleChange} isSelected={selectedValue === value}>
+        <StepperCardWrapper onChange={() => onChange(value)} isSelected={selectedValue === value}>
             <CardIconWrapper color="primary">
                 <Icon/>
             </CardIconWrapper>
