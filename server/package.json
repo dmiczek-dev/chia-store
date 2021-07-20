@@ -1,14 +1,14 @@
 {
   "name": "chia-farming",
   "version": "1.0.0",
-  "private": true,
+  "description": "Chia farming APP",
+  "main": "index.js",
+  "engines": {
+    "node": "14.17.3"
+  },
   "scripts": {
-    "start": "npx nodemon --exec babel-node ./app.js",
-    "dev": "babel-node ./app.js",
-    "clean": "rm -rf dist",
-    "build": "npm run clean && babel ./app.js --out-dir dist --copy-files",
-    "prod": "node ./app.js",
-    "babel-version": "babel --version"
+    "start": "node .",
+    "build": "babel --delete-dir-on-start --out-dir dist --copy-files --ignore \"**/__tests__/**,**/__mocks__/**\" --no-copy-ignored src"
   },
   "dependencies": {
     "axios": "^0.21.1",
@@ -28,6 +28,7 @@
     "@babel/core": "^7.12.10",
     "@babel/node": "^7.12.10",
     "@babel/preset-env": "^7.12.10",
+    "@babel/register": "^7.14.5",
     "nodemon": "^2.0.7"
   }
 }
