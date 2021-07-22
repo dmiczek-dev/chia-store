@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 exports.generateAccessToken = function (payload) {
   return jwt.sign(payload, process.env.TOKEN_SECRET, { expiresIn: 86400 }); // 86400

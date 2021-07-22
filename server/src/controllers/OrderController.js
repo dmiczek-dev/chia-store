@@ -1,6 +1,7 @@
 const { getClient } = require('../db/config')
 const axios = require('axios');
 const querystring = require('querystring');
+const logger = require('../helpers/logger');
 
 exports.getAdminOrders = (req, res, next) => {
     const client = getClient();
@@ -96,7 +97,6 @@ exports.payOrder = (req, res) => {
         })
     }).then(function (response) {
         let accessToken = response.data.access_token;
-        console.error(accessToken);
 
         //Pobranie informacji o zamówieniu
         client.query('SELECT * FROM orders_view WHERE order_id = $1', [orderId]).then((result) => {
@@ -109,25 +109,41 @@ exports.payOrder = (req, res) => {
                 //Wysłanie żądania do PayU
                 axios({
                     method: 'POST',
+                    maxRedirects: 0,
                     url: 'https://secure.payu.com/api/v2_1/orders',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}` },
                     data: {
                         "customerIp": "127.0.0.1",
-                        "merchantPosId": "4117336",
-                        "description": "Chia Zone",
+                        "notifyUrl": `${process.env.PAYU_NOTIFY_URL}`,
+                        "merchantPosId": `${process.env.PAYU_ID}`,
+                        "description": `${process.env.PAYU_NAME}`,
+                        "continueUrl": `${process.env.PAYU_CONTINUE_URL}`,
                         "currencyCode": "PLN",
-                        "totalAmount": "21000",
+                        "totalAmount": `${parseInt(order.total_price * 100, 10)}`,
+                        "buyer": {
+                            "email": `${order.email}`,
+                            "phone": `${order.phone}`,
+                            "firstName": `${order.firstname}`,
+                            "lastName": `${order.lastname}`,
+                        },
                         "products": [
                             {
-                                "name": "Wireless Mouse for Laptop",
-                                "unitPrice": "21000",
-                                "quantity": "1"
+                                "name": `${product.name}`,
+                                "unitPrice": `${parseInt(product.price * 100, 10)}`,
+                                "quantity": `${order.plots}`
                             }
                         ]
+                    },
+                    validateStatus: function (status) {
+                        return status >= 200 && status <= 302
                     }
                 }).then(function (response) {
-                    console.log(response);
-                    res.status(200).send(JSON.stringify(response))
+                    const transactionId = response.data.orderId;
+                    client.query('UPDATE orders SET transaction_id = $1 WHERE order_id = $2', [transactionId, order.order_id]).catch((err) => {
+                        return res.status(500).send(err)
+                    })
+                    logger.info(response.data)
+                    return res.status(200).send(response.data)
                 }).catch(function (error) {
                     console.log(error);
                     res.status(500).send(error)
@@ -144,9 +160,16 @@ exports.payOrder = (req, res) => {
     })
 }
 
-// data: {
-//     access_token: '4e3ec7c5-2b5a-45ed-954a-1d7545c5df2d',
-//     token_type: 'bearer',
-//     expires_in: 43199,
-//     grant_type: 'client_credentials'
-//   }
+exports.notifyOrder = (req, res) => {
+    logger.info(req.body)
+    const client = getClient();
+
+    const status = req.body.order.status;
+    const transactionId = req.body.order.orderId;
+
+    client.query("UPDATE orders SET status = $1 WHERE transaction_id = $2", [status, transactionId]).then((result) => {
+        res.status(200).send();
+    }).catch((err) => {
+        res.status(500).send()
+    })
+}
