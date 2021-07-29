@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Dashboard from '../../layout/Dashboard/Dashboard';
-import SimpleCard from '../../components/SimpleCard/SimpleCard';
+import InfoBox from '../../components/InfoBox/InfoBox';
 
 import styled from 'styled-components';
 import Card from '@material-ui/core/Card';
@@ -89,12 +88,12 @@ export default function Root () {
         <>
 
             <CardGridWrapper>
-                <SimpleCard title="W sumie wyplotowaliśmy" amount="20000+" subtitle="plotów typu k32"/>
-                <SimpleCard title="Wytworzona przestrzeń dyskowa" amount="2.5 PiB" subtitle="Ponad 2 petabajty"/>
-                <SimpleCard title="Nasza infrastruktura plotuje dziennie" amount="200+" subtitle="nieustannie pracując przez 24h"/>
-                <SimpleCard title="Sieć Chia" amount="26 EiB" subtitle="Ponad 26 eksabajtów"/>
-                <SimpleCard title="Cena za 1 sztukę Chia" amount="1100 zł" subtitle="Ostatnia aktualizacja 2021-06-13"/>
-                <SimpleCard title="Zmiana ceny w 24h" amount="-83 zł" subtitle="Ostatnia aktualizacja 2021-06-13"/>
+                <InfoBox title="W sumie wyplotowaliśmy" amount="20000+" subtitle="plotów typu k32"/>
+                <InfoBox title="Wytworzona przestrzeń dyskowa" amount="2.5 PiB" subtitle="Ponad 2 petabajty"/>
+                <InfoBox title="Nasza infrastruktura plotuje dziennie" amount="200+" subtitle="nieustannie pracując przez 24h"/>
+                <InfoBox title="Sieć Chia" amount="26 EiB" subtitle="Ponad 26 eksabajtów"/>
+                <InfoBox title="Cena za 1 sztukę Chia" amount="1100 zł" subtitle="Ostatnia aktualizacja 2021-06-13"/>
+                <InfoBox title="Zmiana ceny w 24h" amount="-83 zł" subtitle="Ostatnia aktualizacja 2021-06-13"/>
             </CardGridWrapper>
             <FullWidthCard>
                 <Heading>Ostatnie zamówienie:</Heading>
