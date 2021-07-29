@@ -14,9 +14,8 @@ exports.createProduct = (req, res) => {
   const client = getClient();
   const productName = req.body.productName;
   const productPrice = req.body.productPrice;
-  const productActive = req.body.productActive;
 
-  client.query('INSERT INTO products(name, price, active) VALUES ($1, $2, $3)',
+  client.query('INSERT INTO products(name, price, active) VALUES ($1, $2, TRUE)',
     [productName, productPrice]).then((result) => {
       res.status(200).send({ message: 'Product created successfully' })
     }).catch((err) => {

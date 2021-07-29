@@ -102,7 +102,7 @@ exports.validateCreateOrder = function (req, res, next) {
     NIP: Joi.custom(validateNip).required(),
     company: Joi.string().required(),
     phone: Joi.string(),
-    buyerType: Joi.string()
+    buyerType: Joi.string().required()
   })
 
   const schemaIndividualOrder = Joi.object().keys({
@@ -116,7 +116,7 @@ exports.validateCreateOrder = function (req, res, next) {
     street: Joi.string().required(),
     NIP: Joi.custom(validateNip),
     phone: Joi.string(),
-    buyerType: Joi.string()
+    buyerType: Joi.string().required()
   })
 
   try {
@@ -191,6 +191,7 @@ exports.validateEditProduct = function (req, res, next) {
     productId: Joi.number().integer().required(),
     name: Joi.string().required(),
     price: Joi.number().required(),
+    active: Joi.boolean().required()
   })
 
   try {
