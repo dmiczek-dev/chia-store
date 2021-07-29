@@ -1,9 +1,9 @@
-import { ConnectForm } from './connectForm';
+import { ConnectForm } from '../../utils/ConnectForm';
 import React from 'react';
 import { Controller } from 'react-hook-form';
 import { TextField } from '@material-ui/core';
 import styled from 'styled-components';
-import { schemaCompany, schemaOrder } from './orderSchema';
+import { schemaCompany, schemaOrder } from '../../utils/orderSchema';
 
 const InputsWrapper = styled.div`
   display: grid;
