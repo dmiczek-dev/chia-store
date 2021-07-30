@@ -111,10 +111,10 @@ exports.createOrder = async (req, res) => {
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}` },
         data: {
             "customerIp": "127.0.0.1",
-            // "notifyUrl": `${process.env.PAYU_NOTIFY_URL}`,
+            "notifyUrl": `${process.env.PAYU_NOTIFY_URL}`,
             "merchantPosId": `${process.env.PAYU_ID}`,
             "description": `${process.env.PAYU_NAME}`,
-            // "continueUrl": `${process.env.PAYU_CONTINUE_URL}`,
+            "continueUrl": `${process.env.PAYU_CONTINUE_URL}`,
             "currencyCode": "PLN",
             "totalAmount": `${parseInt(order.total_price * 100, 10)}`,
             "buyer": {
@@ -158,7 +158,7 @@ exports.notifyOrder = (req, res) => {
     const status = req.body.order.status;
     const transactionId = req.body.order.orderId;
 
-    client.query("UPDATE orders SET tr_status = $1 WHERE tr_id = $2", [status, transactionId]).then((result) => {
+    client.query("UPDATE orders SET tr_status = $1 WHERE tr_id = $2", [status, transactionId]).then(() => {
         res.status(200).send();
     }).catch((err) => {
         res.status(500).send()

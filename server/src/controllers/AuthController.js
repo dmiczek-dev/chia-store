@@ -84,7 +84,8 @@ exports.logout = (req, res) => {
   const payload = req.payload;
 
   client.query('UPDATE users SET jwt_refresh = null WHERE user_id = $1', [payload.userId]).then(() => {
-    res.status(200).send({ message: 'User logout successfully' });
+    res.clearCookie('refreshToken');
+    res.redirect('/');
   }).catch((err) => {
     res.status(500).send({ error: err })
   })
