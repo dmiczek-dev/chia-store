@@ -10,6 +10,7 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { stepsContent } from './OrderFormContent';
 import { validationSchema } from '../../utils/orderValidation';
 import { ActionContainer, OrderFormWrapper, SingleStep, StepWrapper, StyledAlert, StyledButton } from './OrderForm.styles';
+import { getAccessToken } from '../../utils/accessToken';
 
 const OrderForm = () => {
 
@@ -20,8 +21,31 @@ const OrderForm = () => {
     const [activeStep, setActiveStep] = useState(0);
     const { isValid } = methods.formState;
 
+    const url = 'http://localhost:3001/create-orders';
+    const encode = data => {
+        return Object.keys(data).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key])).join('&');
+    };
     //TODO: On submit
-    const onSubmit = data => console.log(data);
+    const onSubmit = async (data) => {
+        const response = await fetch(url, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Authorization': 'Bearer ' + getAccessToken(),
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Cache-Control': 'no-cache',
+            },
+            body: encode(data),
+        });
+        //TODO: Error handling on frontend
+        if (response.status === 200) {
+            const data = await response.json();
+        } else {
+            let error = new Error(response.statusText);
+            error.response = response;
+        }
+
+    };
 
     //TODO: Replace const and state with single state ==========//
     const handleNext = async (index) => {

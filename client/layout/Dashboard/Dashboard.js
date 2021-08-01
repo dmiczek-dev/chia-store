@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Header from '../../components/Header/Header';
 import Sidebar from '../../components/Sidebar/Sidebar';
-import { setAccessToken } from '../../utils/accessToken';
-import { useRouter } from 'next/router'
 import useAuth from '../../hooks/useAuth';
 
 const DashboardWrapper = styled.main`
