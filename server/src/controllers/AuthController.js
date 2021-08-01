@@ -35,7 +35,7 @@ exports.login = (req, res) => {
                     httpOnly: true,
                   });
 
-                  res.status(200).send({ accessToken });
+                  res.status(200).send({ accessToken: accessToken, role: permission });
                 })
             } else {
               res.status(401).send({
