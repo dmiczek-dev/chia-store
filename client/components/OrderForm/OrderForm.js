@@ -40,11 +40,13 @@ const OrderForm = () => {
         //TODO: Error handling on frontend
         if (response.status === 200) {
             const data = await response.json();
+            if (data.status.statusCode === 'SUCCESS') {
+                window.location.href = data.redirectUri;
+            }
         } else {
             let error = new Error(response.statusText);
             error.response = response;
         }
-
     };
 
     //TODO: Replace const and state with single state ==========//
@@ -96,7 +98,7 @@ const OrderForm = () => {
                                                 onClick={() => handleNext(index)}
                                                 type={activeStep === stepsContent.length ? 'submit' : 'button'}
                                             >
-                                                {activeStep === stepsContent.length - 1 ? 'Wyślij' : 'Dalej'}
+                                                {activeStep === stepsContent.length - 1 ? 'Zamawiam i płacę' : 'Dalej'}
                                             </StyledButton>
                                         </SingleStep>
                                     </ActionContainer>
