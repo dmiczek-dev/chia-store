@@ -21,7 +21,7 @@ const OrderForm = () => {
     const [activeStep, setActiveStep] = useState(0);
     const { isValid } = methods.formState;
 
-    const url = process.env.NEXT_PUBLIC_URL + 'create-orders';
+    const url = process.env.NEXT_PUBLIC_URL + 'create-order';
     const encode = data => {
         return Object.keys(data).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key])).join('&');
     };

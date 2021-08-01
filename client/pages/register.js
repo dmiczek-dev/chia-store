@@ -1,6 +1,6 @@
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { Button, TextField, Box } from '@material-ui/core';
+import { Button, TextField, Box, Link } from '@material-ui/core';
 import { RegisterWrapper, RegisterContainer, Heading, Form } from '../styles/Register.styles';
 import { useRouter } from 'next/router';
 
@@ -16,7 +16,7 @@ const Register = () => {
         formState: { errors },
     } = useForm(
         { mode: 'onBlur' });
-    const router = useRouter()
+    const router = useRouter();
 
     const onSubmit = async (data) => {
         console.log(data);
@@ -27,12 +27,12 @@ const Register = () => {
                     'Content-Type': 'application/json',
                     'Cache-Control': 'no-cache',
                 },
-                body: JSON.stringify({ username: data.username, password: data.password, email:  data.email}),
+                body: JSON.stringify({ username: data.username, password: data.password, email: data.email }),
             });
             if (response.status === 200) {
                 const data = await response.json();
-                console.dir(data)
-                router.push('/login')
+                console.dir(data);
+                router.push('/login');
             } else {
                 console.log('Register failed.');
                 let error = new Error(response.statusText);
@@ -86,10 +86,16 @@ const Register = () => {
                                                               helperText={!!errors.password ? 'Uzupełnuj to pole' : ''} label="Hasło" {...field} />}
                         />
                     </Box>
-
-                    <Button type="submit"
-                            variant="contained" color="primary"
-                            size="large">Zarejestruj</Button>
+                    <Box mb={3}>
+                        <Button type="submit"
+                                variant="contained" color="primary"
+                                size="large">Zarejestruj</Button>
+                    </Box>
+                    <Box mb={1}>
+                        <Link href="/login">
+                            Logowanie
+                        </Link>
+                    </Box>
                 </Form>
             </RegisterWrapper>
         </RegisterContainer>
