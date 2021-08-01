@@ -3,6 +3,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { Button, TextField, Box } from '@material-ui/core';
 import { LoginWrapper, LoginContainer, Heading, Form } from '../styles/Login.styles';
 import { useRouter } from 'next/router';
+import { setAccessToken } from '../utils/accessToken';
 
 const Login = () => {
     //TODO Refactor
@@ -29,9 +30,8 @@ const Login = () => {
                 body: JSON.stringify({ username: data.username, password: data.password }),
             });
             if (response.status === 200) {
-                alert('Loged in a');
                 const data = await response.json();
-                console.dir(data)
+                setAccessToken(data.accessToken)
                 router.push('/app')
             } else {
                 console.log('Login failed.');

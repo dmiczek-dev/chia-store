@@ -23,7 +23,6 @@ function useAuth () {
         }
     }
 
-
     const refreshToken = async () => {
         try {
             const res = await fetch('http://localhost:3001/refresh-token', {
@@ -55,16 +54,7 @@ function useAuth () {
 
     const authV = async () => {
         if (isTokenInvalidOrUndefined()) {
-            console.log("Token nie ok");
-            // const refresh = await refreshToken();
-
-            if (await refreshToken()) {
-                console.log("Nowy tokeno");
-            } else {
-                console.log("Nie udało sie odświeżyć");
-            }
-        } else {
-            console.log("token ok");
+            await refreshToken()
         }
     }
 
