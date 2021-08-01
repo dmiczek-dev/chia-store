@@ -10,7 +10,6 @@ router.get("/admin/orders", [authenticate, validateAdmin, OrderController.getAdm
 router.post("/create-order", [authenticate, validateUser, validateCreateOrder, OrderController.createOrder]);
 router.post("/edit-order", [authenticate, validateAdmin, validateEditOrder, OrderController.editOrder]);
 router.get("/order-status", [authenticate, OrderController.getOrderStatus]);
-router.post("/pay-order", OrderController.payOrder);
 router.post("/notify-order", OrderController.notifyOrder);
 
 module.exports = router;

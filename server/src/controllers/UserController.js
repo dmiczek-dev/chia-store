@@ -1,4 +1,5 @@
 const { getClient } = require('../db/config')
+const { hashPassword } = require('../helpers/auth');
 
 exports.getPermissions = (req, res) => {
     const client = getClient();
@@ -47,4 +48,35 @@ exports.getUserById = (req, res) => {
     }).catch((err) => {
         res.status(500).send({ error: err })
     })
+}
+
+exports.toggleUserById = (req, res) => {
+    const client = getClient();
+    const userId = req.body.userId;
+    const active = req.body.active;
+
+    client.query('UPDATE users SET active = $1 WHERE user_id = $2', [active, userId])
+        .then(() => res.status(200).send())
+        .catch((err) => res.status(500).send(err))
+}
+
+exports.changePassword = async (req, res) => {
+    const client = getClient();
+    const payload = req.payload;
+    const password = req.body.password;
+    const hashedPassword = await hashPassword(password)
+
+    client.query('UPDATE users SET password = $1 WHERE user_id = $2', [hashedPassword, payload.userId])
+        .then(() => res.status(200).send())
+        .catch((err) => res.status(500).send(err))
+}
+
+exports.changeEmail = (req, res) => {
+    const client = getClient();
+    const payload = req.payload;
+    const email = req.body.email;
+
+    client.query('UPDATE users SET email = $1 WHERE user_id = $2', [email, payload.userId])
+        .then(() => res.status(200).send())
+        .catch((err) => res.status(500).send(err))
 }

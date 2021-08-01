@@ -90,42 +90,24 @@ exports.validateUser = function (req, res, next) {
 exports.validateCreateOrder = function (req, res, next) {
   const body = req.body;
 
-  const schemaCompanyOrder = Joi.object().keys({
+  const schemaOrder = Joi.object().keys({
     productId: Joi.number().integer().required(),
     plots: Joi.number().required(),
     poolKey: Joi.string().required(),
     farmerKey: Joi.string().required(),
-    firstname: Joi.string(),
-    lastname: Joi.string(),
+    firstname: Joi.string().when('buyerType', { is: "individual", then: Joi.required() }),
+    lastname: Joi.string().when('buyerType', { is: "individual", then: Joi.required() }),
     city: Joi.string().required(),
     street: Joi.string().required(),
-    NIP: Joi.custom(validateNip).required(),
-    company: Joi.string().required(),
-    phone: Joi.string(),
-    buyerType: Joi.string().required()
-  })
-
-  const schemaIndividualOrder = Joi.object().keys({
-    productId: Joi.number().integer().required(),
-    plots: Joi.number().required(),
-    poolKey: Joi.string().required(),
-    farmerKey: Joi.string().required(),
-    firstname: Joi.string().required(),
-    lastname: Joi.string().required(),
-    city: Joi.string().required(),
-    street: Joi.string().required(),
-    NIP: Joi.custom(validateNip),
+    NIP: Joi.custom(validateNip).when('buyerType', { is: "company", then: Joi.required() }),
+    company: Joi.string().when('buyerType', { is: "company", then: Joi.required() }),
     phone: Joi.string(),
     buyerType: Joi.string().required()
   })
 
   try {
-    let validation;
-    if (body.buyerType === "company") {
-      validation = schemaCompanyOrder.validate(body)
-    } else {
-      validation = schemaIndividualOrder.validate(body)
-    }
+    const validation = schemaOrder.validate(body);
+
     if (validation.error) {
       return res.status(400).send({
         status: 'error',
@@ -226,6 +208,50 @@ exports.validateDeleteProduct = function (req, res, next) {
     }
   } catch (err) {
     throw err
+  }
+
+  next();
+}
+
+exports.validateChangePassword = function (req, res, next) {
+  const body = req.body;
+
+  const schema = Joi.object().keys({
+    password: Joi.string().min(5).required(),
+  })
+
+  try {
+    const validation = schema.validate(body)
+    if (validation.error) {
+      return res.status(400).send({
+        status: 'error',
+        message: 'Invalid request data'
+      })
+    }
+  } catch (err) {
+    throw err;
+  }
+
+  next();
+}
+
+exports.validateChangeEmail = function (req, res, next) {
+  const body = req.body;
+
+  const schema = Joi.object().keys({
+    email: Joi.string().email({ minDomainSegments: 2 }).required(),
+  })
+
+  try {
+    const validation = schema.validate(body)
+    if (validation.error) {
+      return res.status(400).send({
+        status: 'error',
+        message: 'Invalid request data'
+      })
+    }
+  } catch (err) {
+    throw err;
   }
 
   next();
