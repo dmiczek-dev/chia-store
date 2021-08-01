@@ -4,7 +4,7 @@ import { Button, TextField, Box } from '@material-ui/core';
 import { RegisterWrapper, RegisterContainer, Heading, Form } from '../styles/Register.styles';
 import { useRouter } from 'next/router';
 
-const url = 'http://localhost:3001/register';
+const url = process.env.NEXT_PUBLIC_URL + 'register';
 
 //TODO refactor
 const Register = () => {

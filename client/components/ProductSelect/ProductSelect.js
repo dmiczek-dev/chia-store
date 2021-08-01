@@ -14,7 +14,7 @@ const SelectPurchaseForm = styled.div`
 `;
 
 const ProductSelect = () => {
-    const { data, error } = useSWR(['http://localhost:3001/products', getAccessToken()]);
+    const { data, error } = useSWR([process.env.NEXT_PUBLIC_URL + 'products', getAccessToken()]);
 
     return (
 

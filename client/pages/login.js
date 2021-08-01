@@ -16,7 +16,7 @@ const Login = () => {
     } = useForm(
         { mode: 'onBlur' });
 
-    const url = 'http://localhost:3001/login';
+    const url = process.env.NEXT_PUBLIC_URL + 'login';
     const router = useRouter()
     const onSubmit = async (data) => {
         try {

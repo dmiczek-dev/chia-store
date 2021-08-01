@@ -25,7 +25,7 @@ function useAuth () {
 
     const refreshToken = async () => {
         try {
-            const res = await fetch('http://localhost:3001/refresh-token', {
+            const res = await fetch(process.env.NEXT_PUBLIC_URL + 'refresh-token', {
                 method: 'POST',
                 credentials: 'include',
                 headers: {

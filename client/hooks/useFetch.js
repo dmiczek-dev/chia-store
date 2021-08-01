@@ -91,7 +91,7 @@ export const useFetch = (url, isAuth = false, body = {}, customConfig = {}, onPa
 };
 
 /*
- const {data, states, compareState, fetchData} = useFetch("http://localhost:3001/protected", true)
+ const {data, states, compareState, fetchData} = useFetch(process.env.NEXT_PUBLIC_URL + "protected", true)
 
     <button onClick={fetchData}>Klis</button>
     { compareState(states.success) && console.log(data)}
