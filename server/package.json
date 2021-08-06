@@ -8,6 +8,7 @@
   },
   "scripts": {
     "start": "node app",
+    "watch": "nodemon app",
     "build": "babel --delete-dir-on-start --out-dir dist --copy-files --ignore \"**/__tests__/**,**/__mocks__/**\" --no-copy-ignored src"
   },
   "dependencies": {

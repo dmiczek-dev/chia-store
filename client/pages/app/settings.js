@@ -3,9 +3,9 @@ import Dashboard from '../../layout/Dashboard/Dashboard';
 
 export default function Settings() {
     return (
-        <Dashboard>
+        <h2>
             Formularz do zmiany hasła oraz email
-        </Dashboard>
+        </h2>
     );
 
 }
