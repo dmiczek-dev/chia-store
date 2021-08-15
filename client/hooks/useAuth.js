@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getAccessToken, setAccessToken } from '../utils/accessToken';
+import { getAccessToken, setAccessToken, setUserRole } from '../utils/accessToken';
 import { useRouter } from 'next/router';
 import jwtDecode from 'jwt-decode';
 
@@ -34,8 +34,9 @@ function useAuth () {
                 },
             })
             if (res.status === 200) {
-                const { accessToken } = await res.json();
+                const { accessToken, role } = await res.json();
                 setAccessToken(accessToken);
+                setUserRole(role)
                 setLoading(false);
                 return true;
             } else {

@@ -1,9 +1,12 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { TitleContext } from '../../layout/Dashboard/Dashboard';
 
 export default function Settings () {
     const { setTitle } = useContext(TitleContext);
-    setTitle('Ustawienia');
+    useEffect(() => {
+        setTitle('Ustawienia');
+    }, []);
+
 
     return (
         <h2>

@@ -1,9 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { TitleContext } from '../../layout/Dashboard/Dashboard';
 
 export default function BuyPlots () {
     const { setTitle } = useContext(TitleContext);
-    setTitle('Kup ploty');
+    useEffect(() => {
+        setTitle('Kup ploty');
+    }, []);
 
     return (
         <>

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { HeaderWrapper, LogoWrapper, PageTitle, StyledButton, StyledLogo } from './Header.styles';
 import { Button } from '@material-ui/core';
-import { setAccessToken } from '../../utils/accessToken';
+import { setAccessToken, setUserRole } from '../../utils/accessToken';
 import { useRouter } from 'next/router';
 import { useFetch } from '../../hooks/useFetch';
 import { TitleContext } from '../../layout/Dashboard/Dashboard';
@@ -13,6 +13,7 @@ const Header = () => {
     const handleLogout = async () => {
         await fetchData();
         setAccessToken();
+        setUserRole()
         await router.push('/login');
     };
     const { title } = useContext(TitleContext);
