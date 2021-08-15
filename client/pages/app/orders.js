@@ -1,7 +1,8 @@
 import React from 'react';
 import OrderForm from '../../components/OrderForm/OrderForm';
 
-const Orders = () => {
+const Orders = ({setPageTitle}) => {
+    setPageTitle("Zamówienia")
     return (
         <OrderForm/>
     );

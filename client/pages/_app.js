@@ -1,5 +1,5 @@
 import NextApp from 'next/app';
-import React from 'react';
+import React, { useState } from 'react';
 import '../public/fonts/fonts.css';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import { ThemeProvider as MaterialThemeProvider, createTheme  } from '@material-ui/core/styles';
@@ -30,6 +30,7 @@ export default function App ({ Component, pageProps }) {
             }),
         }).then(res => res.json())
     }
+    const [pageTitle, setPageTitle] = useState('')
 
     if (router.pathname.startsWith('/app')) {
         return (
@@ -39,8 +40,8 @@ export default function App ({ Component, pageProps }) {
                     <StyledThemeProvider theme={theme}>
                         <MaterialThemeProvider theme={theme}>
                             <SWRConfig value={swrOptions}>
-                                <Dashboard>
-                                    <Component {...pageProps} />
+                                <Dashboard pageTitle={pageTitle}>
+                                    <Component setPageTitle={setPageTitle} {...pageProps} />
                                 </Dashboard>
                             </SWRConfig>
                         </MaterialThemeProvider>

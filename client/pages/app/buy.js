@@ -1,7 +1,7 @@
 import React from 'react';
-import Dashboard from '../../layout/Dashboard/Dashboard';
 
-export default function BuyPlots() {
+export default function BuyPlots({setPageTitle}) {
+    setPageTitle('Kup ploty')
     return (
         <>
             Wybór firma czy osoba prywatna<br />

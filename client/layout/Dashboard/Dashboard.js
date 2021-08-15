@@ -11,7 +11,7 @@ const DashboardWrapper = styled.main`
 "sidebar content";
   grid-template-rows: 6.3rem minmax(0, 1fr);
   grid-template-columns: 14.90rem minmax(0, 1fr);
-  min-height: 0;  
+  min-height: 0;
   min-width: 0;
 `;
 
@@ -22,18 +22,18 @@ const ContentWrapper = styled.div`
   padding: 1rem;
 `;
 
-const Dashboard = ({ children }) => {
+const Dashboard = ({ children, pageTitle }) => {
     const loading = useAuth();
     if (loading) {
         return (<div>...loading</div>);
     }
     return (
         <DashboardWrapper>
-            <Header />
-            <Sidebar />
-            <ContentWrapper>
-                {children}
-            </ContentWrapper>
+                <Header pageTitle={pageTitle}/>
+                <Sidebar/>
+                <ContentWrapper>
+                    {children}
+                </ContentWrapper>
         </DashboardWrapper>
     );
 };

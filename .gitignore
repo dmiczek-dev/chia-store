@@ -4,3 +4,7 @@
 
 ### VisualStudioCode ###
 .vscode/
+
+### Environment Variables ###
+.env
+.env.locale
