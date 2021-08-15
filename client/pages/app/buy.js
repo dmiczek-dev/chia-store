@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { TitleContext } from '../../layout/Dashboard/Dashboard';
 
-export default function BuyPlots({setPageTitle}) {
-    setPageTitle('Kup ploty')
+export default function BuyPlots () {
+    const { setTitle } = useContext(TitleContext);
+    setTitle('Kup ploty');
+
     return (
         <>
-            Wybór firma czy osoba prywatna<br />
-            Wybór rodzaju zamówienia<br />
+            Wybór firma czy osoba prywatna<br/>
+            Wybór rodzaju zamówienia<br/>
             Formularz
         </>
     );

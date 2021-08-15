@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import InfoBox from '../../components/InfoBox/InfoBox';
 import { CardCell, CardContentWrapper, CardDataTitle, CardDataValue, CardGridWrapper, FullWidthCard, Heading } from '../../styles/App.styles';
+import { TitleContext } from '../../layout/Dashboard/Dashboard';
 
-export default function Root ({setPageTitle}) {
-    setPageTitle('Dashboard');
+export default function Root () {
+    const { setTitle } = useContext(TitleContext);
+    setTitle('Dashboard')
+
     return (
         <>
             <CardGridWrapper>

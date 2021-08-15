@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import OrderForm from '../../components/OrderForm/OrderForm';
+import { TitleContext } from '../../layout/Dashboard/Dashboard';
 
-const Orders = ({setPageTitle}) => {
-    setPageTitle("Zamówienia")
+const Orders = () => {
+    const { setTitle } = useContext(TitleContext);
+    setTitle('Zamówienia');
+
     return (
         <OrderForm/>
     );

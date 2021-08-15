@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Header from '../../components/Header/Header';
 import Sidebar from '../../components/Sidebar/Sidebar';
@@ -22,18 +22,26 @@ const ContentWrapper = styled.div`
   padding: 1rem;
 `;
 
-const Dashboard = ({ children, pageTitle }) => {
+export const TitleContext = React.createContext(null);
+
+const Dashboard = ({ children }) => {
+    const [title, setTitle] = useState();
+
     const loading = useAuth();
     if (loading) {
         return (<div>...loading</div>);
     }
+
     return (
         <DashboardWrapper>
-                <Header pageTitle={pageTitle}/>
+            <TitleContext.Provider value={{title, setTitle}}>
+                <Header/>
                 <Sidebar/>
                 <ContentWrapper>
                     {children}
                 </ContentWrapper>
+            </TitleContext.Provider>
+
         </DashboardWrapper>
     );
 };
