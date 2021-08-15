@@ -3,9 +3,18 @@ import { HeaderWrapper, LogoWrapper, PageTitle, StyledButton, StyledLogo } from 
 import { Button } from '@material-ui/core';
 import { setAccessToken } from '../../utils/accessToken';
 import { useRouter } from 'next/router';
+import { useFetch } from '../../hooks/useFetch';
 
 const Header = ({ pageTitle }) => {
-    const router = useRouter()
+    const router = useRouter();
+    const {fetchData} = useFetch(process.env.NEXT_PUBLIC_URL + "logout", true)
+
+    const handleLogout = async () => {
+        await fetchData()
+        setAccessToken();
+        await router.push('/login');
+    };
+    
     return (
         <HeaderWrapper>
             <LogoWrapper>
@@ -15,7 +24,7 @@ const Header = ({ pageTitle }) => {
                 {pageTitle}
             </PageTitle>
             <StyledButton>
-                <Button variant="outlined" onClick={ ()=> {setAccessToken(); router.push('/login'); }}>Wyloguj</Button>
+                <Button variant="outlined" onClick={handleLogout}>Wyloguj</Button>
             </StyledButton>
         </HeaderWrapper>
     );
