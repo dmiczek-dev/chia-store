@@ -15,6 +15,7 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Collapse, Grid } from '@material-ui/core';
+import { getUserRole } from '../../utils/accessToken';
 
 //TODO: Refactor
 
@@ -102,7 +103,10 @@ function Row ({ order }) {
 
 const Orders = () => {
     const { setTitle } = useContext(TitleContext);
-    const { data, states, compareState, fetchData } = useFetch(process.env.NEXT_PUBLIC_URL + 'user/orders', true, null, { method: 'GET' }, true);
+
+    console.log(getUserRole());
+    const url = process.env.NEXT_PUBLIC_URL + (getUserRole() === 'ADMIN' ? 'admin/orders' : 'user/orders');
+    const { data, states, compareState, fetchData } = useFetch(url, true, null, { method: 'GET' }, true);
 
     useEffect(() => {
         setTitle('Zamówienia');
