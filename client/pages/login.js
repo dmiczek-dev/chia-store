@@ -3,7 +3,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { Button, TextField, Box, Link } from '@material-ui/core';
 import { LoginWrapper, LoginContainer, Heading, Form } from '../styles/Login.styles';
 import { useRouter } from 'next/router';
-import { getUserRole, setAccessToken, setUserRole } from '../utils/accessToken';
+import { setAccessToken, setUserRole } from '../utils/accessToken';
 
 const Login = () => {
     //TODO Refactor
@@ -33,7 +33,6 @@ const Login = () => {
                 const data = await response.json();
                 setAccessToken(data.accessToken);
                 setUserRole(data.role)
-                console.log(getUserRole());
                 router.push('/app');
             } else {
                 console.log('Login failed.');

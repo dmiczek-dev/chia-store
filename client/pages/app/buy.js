@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { TitleContext } from '../../layout/Dashboard/Dashboard';
+import OrderForm from '../../components/OrderForm/OrderForm';
 
 export default function BuyPlots () {
     const { setTitle } = useContext(TitleContext);
@@ -8,11 +9,7 @@ export default function BuyPlots () {
     }, []);
 
     return (
-        <>
-            Wybór firma czy osoba prywatna<br/>
-            Wybór rodzaju zamówienia<br/>
-            Formularz
-        </>
+        <OrderForm/>
     );
 
 }
