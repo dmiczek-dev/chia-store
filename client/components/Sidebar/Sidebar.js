@@ -1,7 +1,17 @@
 import React from 'react';
 import ActiveLink from '../ActiveLink/ActiveLink';
 
-import { SidebarWrapper, MenuItem, MenuTitle, StyledHomeIcon, StyledWalletIcon, StyledAssignmentIcon, StyledSettingsIcon } from './Sidebar.styles';
+import {
+    SidebarWrapper,
+    MenuItem,
+    MenuTitle,
+    StyledHomeIcon,
+    StyledWalletIcon,
+    StyledAssignmentIcon,
+    StyledSettingsIcon,
+    StyledUsersIcon,
+} from './Sidebar.styles';
+import { getUserRole } from '../../utils/accessToken';
 
 const Sidebar = () => {
   return (
@@ -38,6 +48,16 @@ const Sidebar = () => {
           </MenuTitle>
         </MenuItem>
       </ActiveLink>
+        {getUserRole() === 'ADMIN' && (
+            <ActiveLink href="/app/users" activeClassName="active" passHref>
+                <MenuItem>
+                    <StyledUsersIcon />
+                    <MenuTitle>
+                        Użytkownicy
+                    </MenuTitle>
+                </MenuItem>
+            </ActiveLink>
+        )}
     </SidebarWrapper>
   );
 };

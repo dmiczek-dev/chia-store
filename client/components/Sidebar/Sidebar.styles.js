@@ -3,6 +3,7 @@ import HomeIcon from '@material-ui/icons/HomeOutlined';
 import WalletIcon from '@material-ui/icons/AccountBalanceWalletOutlined';
 import AssignmentIcon from '@material-ui/icons/AssignmentOutlined';
 import SettingsIcon from '@material-ui/icons/SettingsOutlined';
+import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
 
 export const SidebarWrapper = styled.nav`
   display: flex;
@@ -50,5 +51,9 @@ export const StyledAssignmentIcon = styled(AssignmentIcon)`
 `
 
 export const StyledSettingsIcon = styled(SettingsIcon)`
+  font-size: 3rem
+`
+
+export const StyledUsersIcon = styled(AccessibilityNewIcon)`
   font-size: 3rem
 `

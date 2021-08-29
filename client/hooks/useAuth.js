@@ -3,6 +3,8 @@ import { getAccessToken, setAccessToken, setUserRole } from '../utils/accessToke
 import { useRouter } from 'next/router';
 import jwtDecode from 'jwt-decode';
 
+//TODO Repace with context ot prevent additional requests
+
 function useAuth () {
     //TODO: Refactor
     const [loading, setLoading] = useState(true);
