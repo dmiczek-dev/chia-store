@@ -1,8 +1,12 @@
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { Button, TextField, Box } from '@material-ui/core';
+import { Button, TextField, Box, Link } from '@material-ui/core';
 import { RegisterWrapper, RegisterContainer, Heading, Form } from '../styles/Register.styles';
+import { useRouter } from 'next/router';
 
+const url = process.env.NEXT_PUBLIC_URL + 'register';
+
+//TODO refactor
 const Register = () => {
     const {
         register,
@@ -12,8 +16,37 @@ const Register = () => {
         formState: { errors },
     } = useForm(
         { mode: 'onBlur' });
-    const onSubmit = (data) => {
-        alert(JSON.stringify(data));
+    const router = useRouter();
+
+    const onSubmit = async (data) => {
+        console.log(data);
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Cache-Control': 'no-cache',
+                },
+                body: JSON.stringify({ username: data.username, password: data.password, email: data.email }),
+            });
+            if (response.status === 200) {
+                const data = await response.json();
+                console.dir(data);
+                router.push('/login');
+            } else {
+                console.log('Register failed.');
+                let error = new Error(response.statusText);
+                error.response = response;
+                throw error;
+            }
+        } catch (error) {
+            console.error(
+                'You have an error in your code or there are Network issues.',
+                error,
+            );
+            const { response } = error;
+            alert('Error aa');
+        }
     };
 
     return (
@@ -53,10 +86,16 @@ const Register = () => {
                                                               helperText={!!errors.password ? 'Uzupełnuj to pole' : ''} label="Hasło" {...field} />}
                         />
                     </Box>
-
-                    <Button type="submit"
-                            variant="contained" color="primary"
-                            size="large">Zarejestruj</Button>
+                    <Box mb={3}>
+                        <Button type="submit"
+                                variant="contained" color="primary"
+                                size="large">Zarejestruj</Button>
+                    </Box>
+                    <Box mb={1}>
+                        <Link href="/login">
+                            Logowanie
+                        </Link>
+                    </Box>
                 </Form>
             </RegisterWrapper>
         </RegisterContainer>

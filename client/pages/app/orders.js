@@ -1,11 +1,10 @@
 import React from 'react';
-import Dashboard from '../../layout/Dashboard/Dashboard';
+import OrderForm from '../../components/OrderForm/OrderForm';
 
-export default function Orders() {
+const Orders = () => {
     return (
-        <>
-            Twoje Zamówienia w tabelce
-        </>
+        <OrderForm/>
     );
+};
 
-}
+export default Orders;

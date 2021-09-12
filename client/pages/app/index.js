@@ -1,10 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import Dashboard from '../../layout/Dashboard/Dashboard';
-import SimpleCard from '../../components/SimpleCard/SimpleCard';
-
+import React from 'react';
+import InfoBox from '../../components/InfoBox/InfoBox';
 import styled from 'styled-components';
 import Card from '@material-ui/core/Card';
-import { setAccessToken } from '../../utils/accessToken';
 
 //TODO: REFACTOR
 
@@ -52,49 +49,16 @@ const Heading = styled.h2`
 `;
 
 export default function Root () {
-    const fetchData = async () => {
-        try {
-            const res = await fetch('http://localhost:3001/', {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Cache-Control': 'no-cache',
-                },
-            })
-            if (res.status === 200) {
-                const { accessToken } = await res.json();
-                setAccessToken(accessToken);
-                setLoading(false);
-                return true;
-            } else {
-                console.log('Refesh failed.');
-                // router.push('/login')
-                return false;
-            }
-        } catch (error) {
-            console.error(
-                'You have an error in your code or there are Network issues.',
-                error,
-            );
-            return false;
-            // router.push('/login')
-        }
-    }
-    useEffect(() => {
-
-    }, [])
 
     return (
         <>
-
             <CardGridWrapper>
-                <SimpleCard title="W sumie wyplotowaliśmy" amount="20000+" subtitle="plotów typu k32"/>
-                <SimpleCard title="Wytworzona przestrzeń dyskowa" amount="2.5 PiB" subtitle="Ponad 2 petabajty"/>
-                <SimpleCard title="Nasza infrastruktura plotuje dziennie" amount="200+" subtitle="nieustannie pracując przez 24h"/>
-                <SimpleCard title="Sieć Chia" amount="26 EiB" subtitle="Ponad 26 eksabajtów"/>
-                <SimpleCard title="Cena za 1 sztukę Chia" amount="1100 zł" subtitle="Ostatnia aktualizacja 2021-06-13"/>
-                <SimpleCard title="Zmiana ceny w 24h" amount="-83 zł" subtitle="Ostatnia aktualizacja 2021-06-13"/>
+                <InfoBox title="W sumie wyplotowaliśmy" amount="20000+" subtitle="plotów typu k32"/>
+                <InfoBox title="Wytworzona przestrzeń dyskowa" amount="2.5 PiB" subtitle="Ponad 2 petabajty"/>
+                <InfoBox title="Nasza infrastruktura plotuje dziennie" amount="200+" subtitle="nieustannie pracując przez 24h"/>
+                <InfoBox title="Sieć Chia" amount="26 EiB" subtitle="Ponad 26 eksabajtów"/>
+                <InfoBox title="Cena za 1 sztukę Chia" amount="1100 zł" subtitle="Ostatnia aktualizacja 2021-06-13"/>
+                <InfoBox title="Zmiana ceny w 24h" amount="-83 zł" subtitle="Ostatnia aktualizacja 2021-06-13"/>
             </CardGridWrapper>
             <FullWidthCard>
                 <Heading>Ostatnie zamówienie:</Heading>

@@ -1,8 +1,9 @@
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { Button, TextField, Box } from '@material-ui/core';
+import { Button, TextField, Box, Link } from '@material-ui/core';
 import { LoginWrapper, LoginContainer, Heading, Form } from '../styles/Login.styles';
 import { useRouter } from 'next/router';
+import { setAccessToken } from '../utils/accessToken';
 
 const Login = () => {
     //TODO Refactor
@@ -15,8 +16,8 @@ const Login = () => {
     } = useForm(
         { mode: 'onBlur' });
 
-    const url = 'http://localhost:3001/login';
-    const router = useRouter()
+    const url = process.env.NEXT_PUBLIC_URL + 'login';
+    const router = useRouter();
     const onSubmit = async (data) => {
         try {
             const response = await fetch(url, {
@@ -29,10 +30,9 @@ const Login = () => {
                 body: JSON.stringify({ username: data.username, password: data.password }),
             });
             if (response.status === 200) {
-                alert('Loged in a');
                 const data = await response.json();
-                console.dir(data)
-                router.push('/app')
+                setAccessToken(data.accessToken);
+                router.push('/app');
             } else {
                 console.log('Login failed.');
                 let error = new Error(response.statusText);
@@ -76,9 +76,14 @@ const Login = () => {
                                                               helperText={!!errors.username ? 'Uzupełnij to pole' : ''} label="Hasło" {...field} />}
                         />
                     </Box>
-                    <Button type="submit"
-                            variant="contained" color="primary"
-                            size="large">Zaloguj</Button>
+                    <Box mb={3}>
+                        <Button type="submit" variant="contained" color="primary" size="large">Zaloguj</Button>
+                    </Box>
+                    <Box mb={1}>
+                        <Link href="/register">
+                            Rejestracja
+                        </Link>
+                    </Box>
                 </Form>
             </LoginWrapper>
         </LoginContainer>
