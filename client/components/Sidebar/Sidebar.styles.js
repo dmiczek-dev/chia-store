@@ -3,6 +3,7 @@ import HomeIcon from '@material-ui/icons/HomeOutlined';
 import WalletIcon from '@material-ui/icons/AccountBalanceWalletOutlined';
 import AssignmentIcon from '@material-ui/icons/AssignmentOutlined';
 import SettingsIcon from '@material-ui/icons/SettingsOutlined';
+import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
 
 export const SidebarWrapper = styled.nav`
   display: flex;
@@ -11,11 +12,12 @@ export const SidebarWrapper = styled.nav`
   box-shadow: 2px 0 3px 0 rgb(0 0 0 / 30%);
   grid-area: sidebar;
   margin-top: 2px;
+  overflow: auto;
 `;
 
 export const MenuItem = styled.a`
   width: 100%;
-  padding: 1.5rem 1rem;
+  padding: 1.2rem 1rem;
   display: table-cell;
   text-align: center;
   vertical-align: middle;
@@ -50,5 +52,9 @@ export const StyledAssignmentIcon = styled(AssignmentIcon)`
 `
 
 export const StyledSettingsIcon = styled(SettingsIcon)`
+  font-size: 3rem
+`
+
+export const StyledUsersIcon = styled(AccessibilityNewIcon)`
   font-size: 3rem
 `

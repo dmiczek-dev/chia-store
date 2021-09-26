@@ -21,7 +21,7 @@ export const stepsContent = [
         title: 'Kupuję dla:',
         form: (
             <ConnectForm>
-                {({ control, getValues }) => {
+                {({ control, getValues, unregister }) => {
                     return (<Controller
                             name="buyerType"
                             control={control}
@@ -30,7 +30,11 @@ export const stepsContent = [
                                     <StepperCard Icon={BusinessIcon} title="Firma" value="company"
                                                  name="buyerType" onChange={e => { onChange(e);}} getValues={getValues}/>
                                     <StepperCard Icon={FaceIcon} title="Osob prywatna" value="individual" name="buyerType"
-                                                 onChange={e => { onChange(e);}} getValues={getValues}/>
+                                                 onChange={e => {
+                                                     //todo: test unregister company fields
+                                                     unregister('NIP')
+                                                     unregister('company')
+                                                     onChange(e);}} getValues={getValues}/>
                                 </SelectPurchaseForm>
                             )}
                         />
