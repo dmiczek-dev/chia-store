@@ -117,7 +117,9 @@ export default function Settings() {
                 'You have an error in your code or there are Network issues.',
                 error,
             );
-            setNotify({open: true, error: true});
+            setNotify(prev => {
+                return {...prev, open: false}
+            });
         }
     };
 
