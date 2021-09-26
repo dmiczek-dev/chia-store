@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const HeaderWrapper = styled.div`
   display: grid;
-  grid-template-columns: 15rem 1fr 10rem;
+  grid-template-columns: 13rem 1fr 10rem;
   box-shadow: 0 2px 3px rgb(0 0 0 / 30%);
   align-items: end;
   grid-area: navbar;

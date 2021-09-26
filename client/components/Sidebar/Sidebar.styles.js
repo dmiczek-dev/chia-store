@@ -12,11 +12,12 @@ export const SidebarWrapper = styled.nav`
   box-shadow: 2px 0 3px 0 rgb(0 0 0 / 30%);
   grid-area: sidebar;
   margin-top: 2px;
+  overflow: auto;
 `;
 
 export const MenuItem = styled.a`
   width: 100%;
-  padding: 1.5rem 1rem;
+  padding: 1.2rem 1rem;
   display: table-cell;
   text-align: center;
   vertical-align: middle;
