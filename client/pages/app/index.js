@@ -2,6 +2,8 @@ import React from 'react';
 import InfoBox from '../../components/InfoBox/InfoBox';
 import styled from 'styled-components';
 import Card from '@material-ui/core/Card';
+import {getUserRole} from "../../utils/accessToken";
+import {useFetch} from "../../hooks/useFetch";
 
 //TODO: REFACTOR
 
@@ -70,6 +72,9 @@ export default function Root() {
 
     const daychange = parseChange(-10.799641311552)
 
+    const url = process.env.NEXT_PUBLIC_URL + (getUserRole() === 'ADMIN' ? 'admin/orders' : 'user/orders');
+    const {data} = useFetch(url, true, null, {method: 'GET'}, true);
+
     return (
         <>
             <CardGridWrapper>
@@ -85,27 +90,34 @@ export default function Root() {
             </CardGridWrapper>
             <FullWidthCard>
                 <Heading>Ostatnie zamówienie:</Heading>
+                {data &&
                 <CardContentWrapper>
                     <CardCell>
-                        <CardDataTitle>Data zmaówienia:</CardDataTitle>
-                        <CardDataValue tag="date">data.orderDate</CardDataValue>
+                        <CardDataTitle>Produkt:</CardDataTitle>
+                        <CardDataValue>{data[0].name}</CardDataValue>
                     </CardCell>
                     <CardCell>
                         <CardDataTitle>Data zmaówienia:</CardDataTitle>
-                        <CardDataValue tag="date">2021-12-1</CardDataValue>
+                        <CardDataValue tag="date">{new Date(data[0].date).toLocaleDateString(
+                            'pl-PL',
+                            {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                            },
+                        )}</CardDataValue>
                     </CardCell>
                     <CardCell>
-                        <CardDataTitle>Data zmaówienia:</CardDataTitle>
-                        <CardDataValue tag="date">2021-12-1</CardDataValue>
+                        <CardDataTitle>Kwota:</CardDataTitle>
+                        <CardDataValue>{data[0].total_price} PLN</CardDataValue>
                     </CardCell>
                     <CardCell>
-                        <CardDataTitle>Data zmaówienia:</CardDataTitle>
-                        <CardDataValue tag="date">2021-12-1</CardDataValue>
-                    </CardCell> <CardCell>
-                    <CardDataTitle>Data zmaówienia:</CardDataTitle>
-                    <CardDataValue tag="date">2021-12-1</CardDataValue>
-                </CardCell>
+                        <CardDataTitle>Ilość plotów:</CardDataTitle>
+                        <CardDataValue>{data[0].plots}</CardDataValue>
+                    </CardCell>
                 </CardContentWrapper>
+
+                }
             </FullWidthCard>
         </>
     );
