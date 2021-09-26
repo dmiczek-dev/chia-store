@@ -5,21 +5,20 @@ import Typography from '@material-ui/core/Typography';
 import { useStyles } from './InfoBox.styles';
 
 
-export default function InfoBox(props) {
+export default function InfoBox({ title, amount, subtitle, positive = false }) {
     const classes = useStyles();
-    const bull = <span className={classes.bullet}>•</span>;
 
     return (
         <Card className={classes.root}>
             <CardContent>
                 <Typography className={classes.title} color="textSecondary" gutterBottom>
-                    {props.title}
+                    {title}
                 </Typography>
-                <Typography variant="h5" component="h2">
-                    {props.amount}
+                <Typography className={ positive && classes.red } variant="h5" component="h2">
+                    {amount}
                 </Typography>
                 <Typography variant="body2" component="p">
-                    {props.subtitle}
+                    {subtitle}
                 </Typography>
             </CardContent>
         </Card>

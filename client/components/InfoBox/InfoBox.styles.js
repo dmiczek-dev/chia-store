@@ -15,4 +15,7 @@ export const useStyles = makeStyles({
     pos: {
         marginBottom: 12,
     },
+    red: {
+        color: 'red'
+    }
 });
