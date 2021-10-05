@@ -123,11 +123,10 @@ exports.resetPassword = async (req, res) => {
         from: process.env.MAIL_USERNAME,
         to: email,
         subject: "Password recover",
-        text: "Hello, there was a request for password reset from chiazone domain",
-        html: `<b>Click link below to reset your password</b><br/><a href='${url}'></a>`,
+        html: `Hello, there was a request for password reset from chiazone domain</br>,
+              <b>Click link below to reset your password</b><br/>
+              <a href='${url}'>${url}</a>`,
       });
-
-      console.log(confirmation);
 
       console.log("Message sent: %s", confirmation.messageId);
       res.status(200).send();
