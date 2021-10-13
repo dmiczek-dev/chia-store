@@ -1,19 +1,19 @@
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
 exports.authenticate = function (req, res, next) {
-  const authHeader = req.headers['authorization']
-  const token = authHeader && authHeader.split(' ')[1]
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
 
-  if (token === null) return res.sendStatus(401)
+  if (token === null) return res.sendStatus(401);
 
   jwt.verify(token, process.env.TOKEN_SECRET, (err, payload) => {
     if (err) {
-      return res.sendStatus(403)
+      return res.sendStatus(403);
     }
-    req.payload = payload
-    next()
-  })
-}
+    req.payload = payload;
+    next();
+  });
+};
 
 exports.checkRefreshToken = function (req, res, next) {
   const token = req.cookies.refreshToken;
@@ -25,7 +25,7 @@ exports.checkRefreshToken = function (req, res, next) {
       return res.sendStatus(403);
     }
 
-    req.payload = payload
-    next()
-  })
-}
+    req.payload = payload;
+    next();
+  });
+};
