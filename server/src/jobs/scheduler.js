@@ -3,7 +3,7 @@ const schedule = require("node-schedule");
 const axios = require("axios");
 
 exports.getChiaStats = () => {
-  schedule.scheduleJob("*/1 * * * *", async function () {
+  schedule.scheduleJob("*/55 * * * *", async function () {
     const client = getClient();
 
     //Get Chia netspace
