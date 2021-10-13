@@ -3,7 +3,7 @@ const schedule = require("node-schedule");
 const axios = require("axios");
 
 exports.getChiaStats = () => {
-  schedule.scheduleJob("*/15 * * * *", async function () {
+  schedule.scheduleJob("*/1 * * * *", async function () {
     const client = getClient();
 
     //Get Chia netspace
@@ -38,8 +38,21 @@ exports.getChiaStats = () => {
         console.log(err);
       });
 
+    //Get USD price
+    const usdExchangeRate = await axios({
+      method: "GET",
+      url: "https://api.nbp.pl/api/exchangerates/rates/a/usd/",
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((response) => {
+        return response.data.rates[0].mid;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
     const netspace = (netspaceData.netspace / 1024 / 1024 / 1024 / 1024 / 1024 / 1024).toFixed(2);
-    const price = (marketData.price * 3.9).toFixed(0);
+    const price = (marketData.price * usdExchangeRate).toFixed(0);
     const daychange = (marketData.daychange * 3.9).toFixed(0);
     const date = new Date();
 
