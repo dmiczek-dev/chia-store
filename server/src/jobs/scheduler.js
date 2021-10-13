@@ -53,7 +53,7 @@ exports.getChiaStats = () => {
 
     const netspace = (netspaceData.netspace / 1024 / 1024 / 1024 / 1024 / 1024 / 1024).toFixed(2);
     const price = (marketData.price * usdExchangeRate).toFixed(0);
-    const daychange = (marketData.daychange * 3.9).toFixed(0);
+    const daychange = (marketData.daychange * usdExchangeRate).toFixed(0);
     const date = new Date();
 
     client
