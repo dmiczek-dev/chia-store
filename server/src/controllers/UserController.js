@@ -129,9 +129,9 @@ exports.resetPassword = async (req, res) => {
       });
 
       console.log("Message sent: %s", confirmation.messageId);
-      res.status(200).send();
+      res.status(200).send({ message: "Ok" });
     } else {
-      res.status(404).send({ message: "Invalid email" });
+      res.status(400).send({ message: "Invalid email" });
     }
   });
 };

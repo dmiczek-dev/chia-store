@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {useContext, useEffect} from 'react';
 import InfoBox from '../../components/InfoBox/InfoBox';
 import styled from 'styled-components';
 import Card from '@material-ui/core/Card';
 import {getUserRole} from "../../utils/accessToken";
 import {useFetch} from "../../hooks/useFetch";
+import {TitleContext} from "../../layout/Dashboard/Dashboard";
 
 //TODO: REFACTOR
 
@@ -48,7 +49,10 @@ const Heading = styled.h2`
 `;
 
 export default function Root() {
-
+    const { setTitle } = useContext(TitleContext);
+    useEffect(() => {
+        setTitle('dashboard');
+    }, []);
     // const {netspaceAPI} = useFetch('https://api.chiaprofitability.com/netspace', false, {}, {}, true)
     // const {priceAPI} = useFetch('https://api.chiaprofitability.com/market', false, {}, {}, true)
 
@@ -78,10 +82,10 @@ export default function Root() {
     return (
         <>
             <CardGridWrapper>
-                <InfoBox title="W sumie wyplotowaliśmy" amount="20000+" subtitle="plotów typu k32"/>
-                <InfoBox title="Wytworzona przestrzeń dyskowa" amount="2.5 PiB" subtitle="Ponad 2 petabajty"/>
-                <InfoBox title="Nasza infrastruktura plotuje dziennie" amount="200+"
-                         subtitle="nieustannie pracując przez 24h"/>
+                {/*<InfoBox title="W sumie wyplotowaliśmy" amount="20000+" subtitle="plotów typu k32"/>*/}
+                {/*<InfoBox title="Wytworzona przestrzeń dyskowa" amount="2.5 PiB" subtitle="Ponad 2 petabajty"/>*/}
+                {/*<InfoBox title="Nasza infrastruktura plotuje dziennie" amount="200+"*/}
+                {/*         subtitle="nieustannie pracując przez 24h"/>*/}
                 <InfoBox title="Sieć Chia" amount={`${parsed}`} subtitle={`Ponad ${parsed} eksabajtów`}/>
                 <InfoBox title="Cena za 1 sztukę Chia" amount={`267.00 $USD`}
                          subtitle={`Ostatnia aktualizacja: ${lastUpdate}`}/>

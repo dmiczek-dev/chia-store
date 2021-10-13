@@ -85,6 +85,11 @@ const Login = () => {
                             Rejestracja
                         </Link>
                     </Box>
+                    <Box mb={1}>
+                        <Link href="/reset-password">
+                            Zapomniałem hasła
+                        </Link>
+                    </Box>
                 </Form>
             </LoginWrapper>
         </LoginContainer>
