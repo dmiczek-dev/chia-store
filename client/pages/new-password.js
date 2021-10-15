@@ -54,26 +54,27 @@ const NewPassword = () => {
             <RegisterWrapper>
                 <Heading>Nowe hasło</Heading>
                 <Form onSubmit={handleSubmit(onSubmit)}>
-                    <Box mb={2}>
+                    <Box mb={2} width={220}>
                         <Controller
                             name="password"
                             control={control}
                             defaultValue=""
                             rules={{required: true}}
                             render={({field}) =>
-                                <TextField error={!!errors.email} helperText={!!errors.email ? 'Uzupełnuj to pole' : ''}
+                                <TextField fullWidth error={!!errors.email}
+                                           helperText={!!errors.email ? 'Uzupełnuj to pole' : ''}
                                            label="Hasło" {...field} type="password"/>}
                         />
                     </Box>
-                    <Box mb={2}>
-
+                    <Box mb={2} width={220}>
                         <Controller
                             name="password_check"
                             control={control}
                             defaultValue=""
                             rules={{required: true}}
                             render={({field}) =>
-                                <TextField error={!!errors.email} helperText={!!errors.email ? 'Uzupełnuj to pole' : ''}
+                                <TextField fullWidth error={!!errors.email}
+                                           helperText={!!errors.email ? 'Uzupełnuj to pole' : ''}
                                            label="Powtórz hasło" {...field} type="password"/>}
                         />
                     </Box>

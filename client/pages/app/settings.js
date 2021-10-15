@@ -19,7 +19,7 @@ const StyledList = styled(List)`
 
 const StyledCard = styled(Card)`
   margin: 0 auto;
-  max-width: 450px;
+  max-width: 550px;
 `
 const StyledListItemText = styled(ListItemText)`
   span {
@@ -42,6 +42,11 @@ const StyledForm = styled(Form)`
   justify-content: space-between;
   width: 100%;
   align-items: center;
+`
+
+const StyledTextField = styled(TextField)`
+  width: 15rem;
+  margin-right: auto;
 `
 
 const encode = data => {
@@ -147,7 +152,7 @@ export default function Settings() {
                                     control={control}
                                     rules={{required: true}}
                                     render={({field}) =>
-                                        <TextField error={!!errors.email} autoComplete="off"
+                                        <StyledTextField error={!!errors.email} autoComplete="off"
                                                    helperText={!!errors.email ? 'Uzupełnij to pole' : ''}
                                                    label="Nowy adres email" {...field} />}
                                 />
@@ -171,7 +176,7 @@ export default function Settings() {
                                     control={controlPass}
                                     rules={{required: true}}
                                     render={({field}) =>
-                                        <TextField error={!!errorsPass.password} autoComplete="off"
+                                        <StyledTextField error={!!errorsPass.password} autoComplete="off"
                                                    helperText={!!errorsPass.password ? 'Uzupełnij to pole' : ''}
                                                    type="password"
                                                    label="Nowe hasło" {...field} />}

@@ -53,14 +53,14 @@ const ResetPassword = () => {
             <RegisterWrapper>
                 <Heading>Nowe hasło</Heading>
                 <Form onSubmit={handleSubmit(onSubmit)}>
-                    <Box mb={2}>
+                    <Box mb={3} width={220}>
                         <Controller
                             name="email"
                             control={control}
                             defaultValue=""
                             rules={{ required: true }}
                             render={({ field }) =>
-                                <TextField error={!!errors.email} helperText={!!errors.email ? 'Uzupełnuj to pole' : ''}
+                                <TextField fullWidth error={!!errors.email} helperText={!!errors.email ? 'Uzupełnuj to pole' : ''}
                                            label="Email" {...field} />}
                         />
                     </Box>

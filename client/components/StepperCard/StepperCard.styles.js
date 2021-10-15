@@ -2,12 +2,12 @@ import styled, { css } from 'styled-components';
 import Icon from '@material-ui/core/Icon';
 
 export const StepperCardWrapper = styled.div`
-  margin-top: 50px;
-  padding: 70px 40px 40px;
-  background: rgba(40, 167, 69, 0.25);
+  margin: 50px .5rem 0;
+  padding: 70px 30px 40px;
+  background: rgba(40,167,69,0.25);
   border-radius: 10px;
   position: relative;
-  min-width: 280px;
+  min-width: 260px;
   opacity: 0.8;
   filter: grayscale(.8);
 

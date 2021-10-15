@@ -1,8 +1,8 @@
 import React from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { Button, TextField, Box, Link } from '@material-ui/core';
-import { RegisterWrapper, RegisterContainer, Heading, Form } from '../styles/Register.styles';
-import { useRouter } from 'next/router';
+import {useForm, Controller} from 'react-hook-form';
+import {Button, TextField, Box, Link} from '@material-ui/core';
+import {RegisterWrapper, RegisterContainer, Heading, Form} from '../styles/Register.styles';
+import {useRouter} from 'next/router';
 
 const url = process.env.NEXT_PUBLIC_URL + 'register';
 
@@ -13,9 +13,9 @@ const Register = () => {
         handleSubmit,
         control,
         reset,
-        formState: { errors },
+        formState: {errors},
     } = useForm(
-        { mode: 'onBlur' });
+        {mode: 'onBlur'});
     const router = useRouter();
 
     const onSubmit = async (data) => {
@@ -27,7 +27,7 @@ const Register = () => {
                     'Content-Type': 'application/json',
                     'Cache-Control': 'no-cache',
                 },
-                body: JSON.stringify({ username: data.username, password: data.password, email: data.email }),
+                body: JSON.stringify({username: data.username, password: data.password, email: data.email}),
             });
             if (response.status === 200) {
                 const data = await response.json();
@@ -44,7 +44,7 @@ const Register = () => {
                 'You have an error in your code or there are Network issues.',
                 error,
             );
-            const { response } = error;
+            const {response} = error;
             alert('Error aa');
         }
     };
@@ -54,36 +54,39 @@ const Register = () => {
             <RegisterWrapper>
                 <Heading>Rejestracja</Heading>
                 <Form onSubmit={handleSubmit(onSubmit)}>
-                    <Box mb={2}>
+                    <Box mb={2} width={220}>
                         <Controller
                             name="username"
                             control={control}
                             defaultValue=""
-                            rules={{ required: true }}
-                            render={({ field }) =>
-                                <TextField error={!!errors.username} autoComplete="off" helperText={!!errors.username ? 'Uzupełnij to pole' : ''}
+                            rules={{required: true}}
+                            render={({field}) =>
+                                <TextField fullWidth error={!!errors.username} autoComplete="off"
+                                           helperText={!!errors.username ? 'Uzupełnij to pole' : ''}
                                            label="Nazwa użytkownika" {...field} />}
                         />
                     </Box>
-                    <Box mb={2}>
+                    <Box mb={2} width={220}>
                         <Controller
                             name="email"
                             control={control}
                             defaultValue=""
-                            rules={{ required: true }}
-                            render={({ field }) =>
-                                <TextField error={!!errors.email} helperText={!!errors.email ? 'Uzupełnuj to pole' : ''}
+                            rules={{required: true}}
+                            render={({field}) =>
+                                <TextField fullWidth error={!!errors.email}
+                                           helperText={!!errors.email ? 'Uzupełnuj to pole' : ''}
                                            label="Email" {...field} />}
                         />
                     </Box>
-                    <Box mb={4}>
+                    <Box mb={4} width={220}>
                         <Controller
                             name="password"
                             control={control}
                             defaultValue=""
-                            rules={{ required: true }}
-                            render={({ field }) => <TextField type="password" error={!!errors.password}
-                                                              helperText={!!errors.password ? 'Uzupełnuj to pole' : ''} label="Hasło" {...field} />}
+                            rules={{required: true}}
+                            render={({field}) => <TextField fullWidth type="password" error={!!errors.password}
+                                                            helperText={!!errors.password ? 'Uzupełnuj to pole' : ''}
+                                                            label="Hasło" {...field} />}
                         />
                     </Box>
                     <Box mb={3}>

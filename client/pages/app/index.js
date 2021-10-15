@@ -75,10 +75,10 @@ export default function Root() {
                     {/*         subtitle="nieustannie pracując przez 24h"/>*/}
                     <InfoBox title="Sieć Chia" amount={`${stats[0].netspace} EiB`}
                              subtitle={`Ponad ${stats[0].netspace} eksabajtów`}/>
-                    <InfoBox title="Cena za 1 sztukę Chia" amount={`${stats[0].price}PLN`}
+                    <InfoBox title="Cena za 1 sztukę Chia" amount={`${stats[0].price} PLN`}
                              subtitle={`Ostatnia aktualizacja: ${lastUpdate}`}/>
                     <InfoBox title="Zmiana ceny w 24h" positive={stats[0].daychange < 0}
-                             amount={`${stats[0].daychange > 0 ? '+' :  ''} ${stats[0].daychange}%`}
+                             amount={`${stats[0].daychange > 0 ? '+' :  ''} ${stats[0].daychange} PLN`}
                              subtitle={`Ostatnia aktualizacja ${lastUpdate}`}/>
                 </CardGridWrapper>
             )
