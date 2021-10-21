@@ -14,9 +14,10 @@ import Paper from '@material-ui/core/Paper';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import {makeStyles} from '@material-ui/core/styles';
-import {Box, Button, Collapse, Grid, MenuItem, TextField} from '@material-ui/core';
-import {getUserRole} from '../../utils/accessToken';
+import {Box, Button, Collapse, Grid, MenuItem, Snackbar, TextField} from '@material-ui/core';
+import {getAccessToken, getUserRole} from '../../utils/accessToken';
 import {Controller, useForm} from "react-hook-form";
+import {Alert} from "@material-ui/lab";
 
 //TODO: Refactor
 
@@ -45,8 +46,6 @@ const InnerCell = styled(TableCell)`
 
 const InnerGrid = styled(Grid)`
   flex: auto;
-  //max-width: 22%;
-  //flex-basis: 22%;
   margin-right: 3%;
 
   &:last-child {
@@ -54,8 +53,24 @@ const InnerGrid = styled(Grid)`
   }
 `;
 
+const submitUrl = process.env.NEXT_PUBLIC_URL + ('edit-product');
+const encode = data => {
+    return Object.keys(data).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key])).join('&');
+};
+
 function Row({product}) {
     const [open, setOpen] = useState(false);
+    const [notify, setNotify] = useState({open: false, error: false});
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setNotify(prev => {
+            return {...prev, open: false}
+        });
+    };
+
     const classes = useRowStyles();
     const {
         register,
@@ -68,18 +83,19 @@ function Row({product}) {
     const onSubmit = async (data) => {
         console.log(data);
         try {
-            const response = await fetch(url, {
+            const response = await fetch(submitUrl, {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded',
                     'Cache-Control': 'no-cache',
+                    'Authorization': 'Bearer ' + getAccessToken(),
                 },
-                body: JSON.stringify({username: data.username, password: data.password, email: data.email}),
+                body: encode({productActive: true, productPrice: data.productPrice, productName: data.productName,productId: data.productId}),
             });
             if (response.status === 200) {
-                const data = await response.json();
-                console.dir(data);
-                router.push('/login');
+                setNotify({open: true, error: false});
+                // fetchData();
             } else {
                 console.log('Register failed.');
                 let error = new Error(response.statusText);
@@ -91,8 +107,7 @@ function Row({product}) {
                 'You have an error in your code or there are Network issues.',
                 error,
             );
-            const {response} = error;
-            alert('Error aa');
+            setNotify({open: true, error: true});
         }
     };
 
@@ -124,7 +139,7 @@ function Row({product}) {
                                     <Grid container item xs={12}>
                                         <InnerGrid item>
                                             <Controller
-                                                name="username"
+                                                name="productName"
                                                 control={control}
                                                 defaultValue=""
                                                 rules={{required: true}}
@@ -136,7 +151,7 @@ function Row({product}) {
                                         </InnerGrid>
                                         <InnerGrid item>
                                             <Controller
-                                                name="username"
+                                                name="productPrice"
                                                 control={control}
                                                 defaultValue=""
                                                 rules={{required: true}}
@@ -149,7 +164,7 @@ function Row({product}) {
                                         </InnerGrid>
                                         <InnerGrid item>
                                             <Controller
-                                                name="username"
+                                                name="productActive"
                                                 control={control}
                                                 defaultValue=""
                                                 rules={{required: true}}
@@ -158,15 +173,23 @@ function Row({product}) {
                                                                autoComplete="off"
                                                                helperText={!!errors.username ? 'Uzupełnij to pole' : ''}
                                                                label="Aktywny" {...field} >
-                                                        <MenuItem key="aa" value="asdasda">
+                                                        <MenuItem key="yes" value={true}>
                                                             Tak
                                                         </MenuItem>
-                                                        <MenuItem key="bbb" value="dasdas">
+                                                        <MenuItem key="no" value={false}>
                                                             Nie
                                                         </MenuItem>
                                                     </TextField>}
                                             />
                                         </InnerGrid>
+                                        <Controller
+                                            name="productId"
+                                            control={control}
+                                            defaultValue={product.product_id}
+                                            rules={{required: true}}
+                                            render={({field}) =>
+                                                <input type="hidden" name="product_id" value={product.product_id}/>}
+                                        />
                                         <InnerGrid item>
                                             <Button type="submit"
                                                     variant="contained" color="primary"
@@ -179,6 +202,18 @@ function Row({product}) {
                     </Collapse>
                 </InnerCell>
             </TableRow>
+            <Snackbar open={notify.open} autoHideDuration={6000} onClose={handleClose}>
+                {notify.error ?
+                    <Alert onClose={handleClose} severity="error">
+                        Wystąpił błąd, spróbuj ponownie później
+                    </Alert>
+                    :
+                    <Alert onClose={handleClose} severity="success">
+                        Operacja zkończona skucesem
+                    </Alert>
+                }
+
+            </Snackbar>
         </>
     );
 }
