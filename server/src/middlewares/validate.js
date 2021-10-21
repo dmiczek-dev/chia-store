@@ -173,7 +173,7 @@ exports.validateEditProduct = function (req, res, next) {
     productId: Joi.number().integer().required(),
     name: Joi.string().required(),
     price: Joi.number().required(),
-    active: Joi.boolean().required(),
+    active: Joi.string().required(),
   });
 
   try {
