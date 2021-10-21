@@ -1,9 +1,9 @@
 import React from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { Button, TextField, Box, Link } from '@material-ui/core';
-import { LoginWrapper, LoginContainer, Heading, Form } from '../styles/Login.styles';
-import { useRouter } from 'next/router';
-import { setAccessToken, setUserRole } from '../utils/accessToken';
+import {useForm, Controller} from 'react-hook-form';
+import {Button, TextField, Box, Link} from '@material-ui/core';
+import {LoginWrapper, LoginContainer, Heading, Form} from '../styles/Login.styles';
+import {useRouter} from 'next/router';
+import {setAccessToken, setUserRole} from '../utils/accessToken';
 
 const Login = () => {
     //TODO Refactor
@@ -12,9 +12,9 @@ const Login = () => {
         handleSubmit,
         control,
         reset,
-        formState: { errors },
+        formState: {errors},
     } = useForm(
-        { mode: 'onBlur' });
+        {mode: 'onBlur'});
 
     const url = process.env.NEXT_PUBLIC_URL + 'login';
     const router = useRouter();
@@ -27,7 +27,7 @@ const Login = () => {
                     'Content-Type': 'application/json',
                     'Cache-Control': 'no-cache',
                 },
-                body: JSON.stringify({ username: data.username, password: data.password }),
+                body: JSON.stringify({username: data.username, password: data.password}),
             });
             if (response.status === 200) {
                 const data = await response.json();
@@ -46,7 +46,7 @@ const Login = () => {
                 error,
             );
 
-            const { response } = error;
+            const {response} = error;
             alert('Error aa');
         }
     };
@@ -56,25 +56,29 @@ const Login = () => {
             <LoginWrapper>
                 <Heading>Logowanie</Heading>
                 <Form onSubmit={handleSubmit(onSubmit)}>
-                    <Box mb={2}>
+                    <Box mb={2} width={220}>
                         <Controller
                             name="username"
                             control={control}
                             defaultValue=""
-                            rules={{ required: true }}
-                            render={({ field }) =>
-                                <TextField error={!!errors.username} autoComplete="off" helperText={!!errors.username ? 'Uzupełnij to pole' : ''}
+                            rules={{required: true}}
+                            render={({field}) =>
+                                <TextField fullWidth
+                                           error={!!errors.username} autoComplete="off"
+                                           helperText={!!errors.username ? 'Uzupełnij to pole' : ''}
                                            label="Nazwa użytkownika" {...field} />}
                         />
                     </Box>
-                    <Box mb={4}>
+                    <Box mb={4} width={220}>
                         <Controller
                             name="password"
                             control={control}
                             defaultValue=""
-                            rules={{ required: true }}
-                            render={({ field }) => <TextField type="password" error={!!errors.password} autoComplete="off"
-                                                              helperText={!!errors.username ? 'Uzupełnij to pole' : ''} label="Hasło" {...field} />}
+                            rules={{required: true}}
+                            render={({field}) => <TextField fullWidth type="password" error={!!errors.password}
+                                                            autoComplete="off"
+                                                            helperText={!!errors.username ? 'Uzupełnij to pole' : ''}
+                                                            label="Hasło" {...field} />}
                         />
                     </Box>
                     <Box mb={3}>
@@ -83,6 +87,11 @@ const Login = () => {
                     <Box mb={1}>
                         <Link href="/register">
                             Rejestracja
+                        </Link>
+                    </Box>
+                    <Box mb={1}>
+                        <Link href="/reset-password">
+                            Zapomniałem hasła
                         </Link>
                     </Box>
                 </Form>

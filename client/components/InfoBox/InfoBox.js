@@ -14,7 +14,7 @@ export default function InfoBox({ title, amount, subtitle, positive = false }) {
                 <Typography className={classes.title} color="textSecondary" gutterBottom>
                     {title}
                 </Typography>
-                <Typography className={ positive && classes.red } variant="h5" component="h2">
+                <Typography className={ positive ? classes.red : '' } variant="h5" component="h2">
                     {amount}
                 </Typography>
                 <Typography variant="body2" component="p">

@@ -24,14 +24,25 @@ const Sidebar = () => {
                     </MenuTitle>
                 </MenuItem>
             </ActiveLink>
-            <ActiveLink href="/app/buy" activeClassName="active" passHref>
-                <MenuItem>
-                    <StyledWalletIcon/>
-                    <MenuTitle>
-                        Kup ploty
-                    </MenuTitle>
-                </MenuItem>
-            </ActiveLink>
+            {getUserRole() === 'ADMIN' ? (
+                <ActiveLink href="/app/products" activeClassName="active" passHref>
+                    <MenuItem>
+                        <StyledWalletIcon/>
+                        <MenuTitle>
+                            Produkty
+                        </MenuTitle>
+                    </MenuItem>
+                </ActiveLink>
+            ) : (
+                <ActiveLink href="/app/buy" activeClassName="active" passHref>
+                    <MenuItem>
+                        <StyledWalletIcon/>
+                        <MenuTitle>
+                            Kup ploty
+                        </MenuTitle>
+                    </MenuItem>
+                </ActiveLink>
+            )}
             <ActiveLink href="/app/orders" activeClassName="active" passHref>
                 <MenuItem>
                     <StyledAssignmentIcon/>

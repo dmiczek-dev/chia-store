@@ -4,10 +4,10 @@ import {Button, TextField, Box, Link} from '@material-ui/core';
 import {RegisterWrapper, RegisterContainer, Heading, Form} from '../styles/Register.styles';
 import {useRouter} from 'next/router';
 
-const url = process.env.NEXT_PUBLIC_URL + 'register';
+const url = process.env.NEXT_PUBLIC_URL + 'new-password';
 
-//TODO refactor
-const Register = () => {
+//TODO refactor, fix after field reset change from controlled to uncontrolled
+const NewPassword = () => {
     const {
         register,
         handleSubmit,
@@ -18,8 +18,8 @@ const Register = () => {
         {mode: 'onBlur'});
     const router = useRouter();
 
+
     const onSubmit = async (data) => {
-        console.log(data);
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -27,14 +27,14 @@ const Register = () => {
                     'Content-Type': 'application/json',
                     'Cache-Control': 'no-cache',
                 },
-                body: JSON.stringify({username: data.username, password: data.password, email: data.email}),
+                body: JSON.stringify({token: router.query.token, password: data.password}),
             });
             if (response.status === 200) {
                 const data = await response.json();
                 console.dir(data);
                 router.push('/login');
             } else {
-                console.log('Register failed.');
+                console.log('Password failed');
                 let error = new Error(response.statusText);
                 error.response = response;
                 throw error;
@@ -52,52 +52,36 @@ const Register = () => {
     return (
         <RegisterContainer>
             <RegisterWrapper>
-                <Heading>Rejestracja</Heading>
+                <Heading>Nowe hasło</Heading>
                 <Form onSubmit={handleSubmit(onSubmit)}>
                     <Box mb={2} width={220}>
                         <Controller
-                            name="username"
-                            control={control}
-                            defaultValue=""
-                            rules={{required: true}}
-                            render={({field}) =>
-                                <TextField fullWidth error={!!errors.username} autoComplete="off"
-                                           helperText={!!errors.username ? 'Uzupełnij to pole' : ''}
-                                           label="Nazwa użytkownika" {...field} />}
-                        />
-                    </Box>
-                    <Box mb={2} width={220}>
-                        <Controller
-                            name="email"
+                            name="password"
                             control={control}
                             defaultValue=""
                             rules={{required: true}}
                             render={({field}) =>
                                 <TextField fullWidth error={!!errors.email}
                                            helperText={!!errors.email ? 'Uzupełnuj to pole' : ''}
-                                           label="Email" {...field} />}
+                                           label="Hasło" {...field} type="password"/>}
                         />
                     </Box>
-                    <Box mb={4} width={220}>
+                    <Box mb={2} width={220}>
                         <Controller
-                            name="password"
+                            name="password_check"
                             control={control}
                             defaultValue=""
                             rules={{required: true}}
-                            render={({field}) => <TextField fullWidth type="password" error={!!errors.password}
-                                                            helperText={!!errors.password ? 'Uzupełnuj to pole' : ''}
-                                                            label="Hasło" {...field} />}
+                            render={({field}) =>
+                                <TextField fullWidth error={!!errors.email}
+                                           helperText={!!errors.email ? 'Uzupełnuj to pole' : ''}
+                                           label="Powtórz hasło" {...field} type="password"/>}
                         />
                     </Box>
                     <Box mb={3}>
                         <Button type="submit"
                                 variant="contained" color="primary"
-                                size="large">Zarejestruj</Button>
-                    </Box>
-                    <Box mb={1}>
-                        <Link href="/login">
-                            Logowanie
-                        </Link>
+                                size="large">Wyślij</Button>
                     </Box>
                 </Form>
             </RegisterWrapper>
@@ -105,5 +89,5 @@ const Register = () => {
     );
 };
 
-export default Register;
+export default NewPassword;
 
