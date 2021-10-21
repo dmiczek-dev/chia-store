@@ -163,7 +163,7 @@ const Users = () => {
                 </TableContainer>
                 :
                 <Typography variant="h4" align="center">
-                    Brak zamówień
+                    Brak użytkowników
                 </Typography>
             }
         </OrdersListWrapper>
