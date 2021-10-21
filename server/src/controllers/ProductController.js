@@ -31,23 +31,18 @@ exports.createProduct = (req, res) => {
 exports.editProduct = (req, res) => {
   const client = getClient();
   const productId = req.body.productId;
-  const productName = req.body.productName;
-  const productPrice = req.body.productPrice;
-  let productActive;
+  const name = req.body.name;
+  const price = req.body.price;
+  let active;
 
-  if (req.body.productActive == "true") {
-    productActive = true;
+  if (req.body.active == "true") {
+    active = true;
   } else {
-    productActive = false;
+    active = false;
   }
 
   client
-    .query("UPDATE products SET name = $1, price = $2, active = $3 WHERE product_id = $4", [
-      productName,
-      productPrice,
-      productActive,
-      productId,
-    ])
+    .query("UPDATE products SET name = $1, price = $2, active = $3 WHERE product_id = $4", [name, price, active, productId])
     .then((result) => {
       res.status(200).send({ message: "Product changed successfully" });
     })
