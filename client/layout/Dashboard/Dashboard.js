@@ -16,7 +16,7 @@ const DashboardWrapper = styled.main`
   min-width: 74rem;
   max-width: 84rem;
   width: 70vw;
-  height: 70.5vh;
+  height: 80vh;
   background: white;
   overflow: hidden;
   max-height: 47.5rem;
