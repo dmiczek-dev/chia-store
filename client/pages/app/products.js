@@ -91,7 +91,7 @@ function Row({product}) {
                     'Cache-Control': 'no-cache',
                     'Authorization': 'Bearer ' + getAccessToken(),
                 },
-                body: encode({productActive: true, productPrice: data.productPrice, productName: data.productName,productId: data.productId}),
+                body: encode({active: true, price: data.productPrice, name: data.productName, productId: data.productId}),
             });
             if (response.status === 200) {
                 setNotify({open: true, error: false});
