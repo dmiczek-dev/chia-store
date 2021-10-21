@@ -40,7 +40,7 @@ exports.getUsers = (req, res) => {
   const client = getClient();
 
   client
-    .query("SELECT * FROM users_view ORDER BY ")
+    .query("SELECT * FROM users_view ORDER BY user_id")
     .then((result) => {
       res.status(200).send(result.rows);
     })

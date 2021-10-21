@@ -16,7 +16,7 @@ const router = express.Router();
 
 router.get("/permissions", [authenticate, UserController.getPermissions]);
 router.get("/users", [authenticate, validateAdmin, UserController.getUsers]);
-router.get("/user", [authenticate, validateUser, UserController.getUserById]);
+router.get("/user", [authenticate, UserController.getUserById]);
 router.post("/create-account", [authenticate, validateAdmin, validateCreateAccount, UserController.createAccount]);
 router.post("/toggle-user", [authenticate, validateAdmin, toggleUserById]);
 router.post("/change-password", [authenticate, validateChangePassword, UserController.changePassword]);
